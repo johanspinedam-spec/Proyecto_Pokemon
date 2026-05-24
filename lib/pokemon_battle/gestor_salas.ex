@@ -13,6 +13,19 @@ defmodule PokemonBattle.GestorSalas do
   def list_rooms, do: GenServer.call(__MODULE__, :list)
   def get_room(room_id), do: GenServer.call(__MODULE__, {:get, room_id})
 
-  
+  def handle_call({:create_room, turn_time}, _from, state) do
+    counter = state.counter + 1
+    room_id = "S-#{String.pad_leading(to_string(counter), 4, "0")}"
+
+    room = %{id: room_id, turn_time: turn_time, players: [], teams: %{}, pids: %{}, phase: :waiting}
+
+    new_state =
+      state
+      |> put_in([:rooms, room_id], room)
+      |> Map.put(:counter, counter)
+
+    IO.puts("[Rooms] Room #{room_id} created (turn time: #{turn_time}s).")
+    {:reply, {:ok, room_id}, new_state}
+  end
 
 end
