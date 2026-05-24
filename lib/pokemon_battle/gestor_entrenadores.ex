@@ -207,4 +207,18 @@ defmodule PokemonBattle.GestorEntrenadores do
     end
   end
 
+  # DELETE — eliminar equipo completo
+  def delete_team(trainer, name) do
+    teams = trainer["teams"]
+
+    case Enum.find(teams, fn t -> t["name"] == name end) do
+      nil ->
+        {:error, "Team '#{name}' not found"}
+
+      _ ->
+        updated_teams = Enum.reject(teams, fn t -> t["name"] == name end)
+        {:ok, Map.put(trainer, "teams", updated_teams)}
+    end
+  end
+
 end
