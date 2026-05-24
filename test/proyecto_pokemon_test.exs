@@ -122,4 +122,55 @@ defmodule PokemonBattleTest do
     assert updated_loser["accumulated_coins"] == 130
   end
 
+  # 4. Apertura de sobres
+
+
+  test "opening a pack gives exactly 3 pokemon with correct owner and 4 moves each" do
+    trainer = %{
+      "username"          => "testuser",
+      "coins"             => 500,
+      "accumulated_coins" => 500,
+      "wins"              => 0,
+      "inventory"         => [],
+      "packs"             => [%{"id" => 999, "type" => "basic"}],
+      "teams"             => []
+    }
+
+    {:ok, updated_trainer, pokemon_list} = SistemaSobres.open_pack(trainer, "999")
+
+    # Exactamente 3 pokemon
+    assert length(pokemon_list) == 3
+
+    # Cada pokemon tiene dueño correcto, rareza válida y 4 movimientos
+    Enum.each(pokemon_list, fn p ->
+      assert p["original_owner"] == "testuser"
+      assert p["rarity"] in ["common", "rare", "epic"]
+      assert length(p["moves"]) == 4
+      assert p["wins"] == 0
+    end)
+
+    # El sobre fue consumido
+    assert length(updated_trainer["packs"]) == 0
+
+    # Los 3 pokemon están en el inventario
+    assert length(updated_trainer["inventory"]) == 3
+  end
+
+  test "rarity factor generates stats within expected range for common rarity" do
+    # Probamos create_instance varias veces y verificamos que las stats
+    # están dentro del rango esperado para rareza común (factor 2%-8%)
+    # Usamos charmander: base_attack=52, base_defense=43, base_speed=65
+    results = Enum.map(1..20, fn _ ->
+      SistemaSobres.create_instance("charmander", "common", "testuser")
+    end)
+
+    Enum.each(results, fn p ->
+      # factor mínimo 2% → round(52 * 1.02) = 53
+      # factor máximo 8% → round(52 * 1.08) = 56
+      assert p["attack"] >= 53
+      assert p["attack"] <= 56
+      assert p["rarity"] == "common"
+    end)
+  end
+
 end
