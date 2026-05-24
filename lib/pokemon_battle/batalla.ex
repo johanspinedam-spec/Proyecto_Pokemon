@@ -154,4 +154,8 @@ defmodule PokemonBattle.Batalla do
     new_state = end_battle(state, winner, "surrender")
     {:reply, :ok, new_state}
   end
+
+  def handle_call(:get_state, _from, state) do
+    {:reply, state, state}
+  end
 end
