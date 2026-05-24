@@ -263,4 +263,13 @@ defmodule PokemonBattle.Batalla do
       end
     end)
   end
+
+  defp format_alive_team(team) do
+    team
+    |> Enum.map(fn p ->
+      "  [##{p["id"]}] #{String.capitalize(p["species"])} " <>
+      "(#{Enum.join(p["types"], "/")}) | HP: #{p["current_hp"]}/100 | Spd: #{p["speed"]}"
+    end)
+    |> Enum.join("\n")
+  end
 end
