@@ -130,4 +130,18 @@ defmodule PokemonBattle.Intercambio do
     {:reply, state, state}
   end
 
+  defp execute_trade(state) do
+    [user1, user2] = Map.keys(state.participants)
+    pokemon1 = state.offers[user1]
+    pokemon2 = state.offers[user2]
+
+    broadcast(state, """
+
+    [Trade #{state.code}] Trade completed!
+      #{user1} received [##{pokemon2["id"]}] #{String.capitalize(pokemon2["species"])}
+      #{user2} received [##{pokemon1["id"]}] #{String.capitalize(pokemon1["species"])}
+    """)
+
+    %{user1 => pokemon2, user2 => pokemon1}
+  end
 end
