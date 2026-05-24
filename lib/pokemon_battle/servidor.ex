@@ -130,4 +130,26 @@ defmodule PokemonBattle.Servidor do
     with_session(session, fn -> GestorEntrenadores.show_inventory(session.trainer) end)
   end
 
+  defp process("login " <> rest, session) do
+    case String.split(rest) do
+      [username, password] ->
+        case GestorEntrenadores.login(username, password) do
+          {:ok, :registered, trainer} ->
+            IO.puts("Welcome #{username}! Account created. You have 1 free basic pack.")
+            %{session | trainer: trainer}
+
+          {:ok, :logged_in, trainer} ->
+            IO.puts("Welcome back, #{username}!")
+            %{session | trainer: trainer}
+
+          {:error, msg} ->
+            IO.puts("Error: #{msg}")
+            session
+        end
+
+      _ ->
+        IO.puts("Usage: login <username> <password>")
+        session
+    end
+  end
 end
