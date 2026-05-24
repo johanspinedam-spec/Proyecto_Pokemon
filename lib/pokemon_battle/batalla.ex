@@ -435,4 +435,11 @@ defmodule PokemonBattle.Batalla do
       send(pid, {:battle_event, message})
     end)
   end
+
+  defp update_in_team(state, username, updated_pokemon) do
+    new_team = Enum.map(state.teams[username], fn p ->
+      if p["id"] == updated_pokemon["id"], do: updated_pokemon, else: p
+    end)
+    put_in(state.teams[username], new_team)
+  end
 end
