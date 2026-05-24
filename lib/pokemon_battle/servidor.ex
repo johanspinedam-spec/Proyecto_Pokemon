@@ -612,4 +612,9 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("connect_node " <> node, session) do
+    Cluster.connect(String.to_atom(String.trim(node)))
+    session
+  end
 end
