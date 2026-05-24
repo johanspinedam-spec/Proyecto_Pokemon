@@ -679,4 +679,24 @@ defmodule PokemonBattle.Servidor do
      end
     end
   end
+
+  defp wait_for_trade_completion(session) do
+    receive do
+      {:trade_completed, received} ->
+        trade_state = route_to_primary(
+          fn -> Intercambio.get_state(session.trade_room) end,
+          fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :get_state, [session.trade_room]) end
+        )
+        offered = trade_state.offers[session.trainer["username"]]
+        update_inventory_after_trade(session, offered, received)
+
+      {:battle_event, msg} ->
+        IO.puts(msg)
+        wait_for_trade_completion(session)
+    after
+      30_000 ->
+        IO.puts("Trade timed out.")
+        %{session | trade_room: nil}
+    end
+  end
 end
