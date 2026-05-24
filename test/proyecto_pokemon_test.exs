@@ -173,4 +173,63 @@ defmodule PokemonBattleTest do
     end)
   end
 
+  # 5. Intercambio de Pokémon
+
+
+  test "trade swaps pokemon between trainers preserving id, rarity and original_owner" do
+    pokemon_ana = %{
+      "id" => 111, "species" => "charmander", "types" => ["Fire"],
+      "rarity" => "rare", "original_owner" => "ana",
+      "attack" => 57, "defense" => 47, "speed" => 72,
+      "moves" => [], "wins" => 0
+    }
+    pokemon_luis = %{
+      "id" => 222, "species" => "graveler", "types" => ["Rock", "Ground"],
+      "rarity" => "common", "original_owner" => "luis",
+      "attack" => 102, "defense" => 123, "speed" => 37,
+      "moves" => [], "wins" => 0
+    }
+
+    trainer_ana = %{
+      "username"          => "ana_trade",
+      "coins"             => 100,
+      "accumulated_coins" => 100,
+      "wins"              => 0,
+      "inventory"         => [pokemon_ana],
+      "packs"             => [],
+      "teams"             => []
+    }
+    trainer_luis = %{
+      "username"          => "luis_trade",
+      "coins"             => 100,
+      "accumulated_coins" => 100,
+      "wins"              => 0,
+      "inventory"         => [pokemon_luis],
+      "packs"             => [],
+      "teams"             => []
+    }
+
+    code = "TEST-#{:rand.uniform(9999)}"
+    Intercambio.create(code)
+    Intercambio.join(code, trainer_ana)
+    Intercambio.join(code, trainer_luis)
+    Intercambio.offer(code, "ana_trade", pokemon_ana)
+    Intercambio.offer(code, "luis_trade", pokemon_luis)
+
+    :ok = Intercambio.confirm(code, "ana_trade")
+    {:completed, result} = Intercambio.confirm(code, "luis_trade")
+
+
+    received_by_ana  = result["ana_trade"]
+    received_by_luis = result["luis_trade"]
+
+    assert received_by_ana["id"]             == 222
+    assert received_by_ana["original_owner"] == "luis"
+    assert received_by_ana["rarity"]         == "common"
+
+    assert received_by_luis["id"]             == 111
+    assert received_by_luis["original_owner"] == "ana"
+    assert received_by_luis["rarity"]         == "rare"
+  end
+
 end
