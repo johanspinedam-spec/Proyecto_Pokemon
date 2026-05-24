@@ -63,4 +63,21 @@ defmodule PokemonBattle.Evolution do
     Map.put(trainer, "inventory", update_inventory)
   end
 
+  # Evolution chain info
+
+  def show_evolution_chain(species) do
+    catalog = Persistencia.read_pokemon()
+    chain = build_chain(catalog, species, [])
+
+    IO.puts("\n Evolution Chain for #{String.capitalize(species)}:")
+    chain
+    |> Enum.with_index(1)
+    |> Enum.each(fn {s, index} ->
+      base = catalog[s]
+      wins_needed = base["evolution_wins"]
+      wins_text = if wins_needed, do: "(evolves at #{wins_needed} wins)", else: "(final evolution)"
+      IO.puts("  #{index}. #{String.capitalize(s)} #{wins_text}")
+    end)
+  end
+
 end
