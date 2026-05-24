@@ -292,4 +292,27 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
+  # Renombrar equipo
+  defp process("rename_team " <> rest, session) do
+    with_session(session, fn ->
+      case String.split(String.trim(rest)) do
+        [old_name, new_name] ->
+          case GestorEntrenadores.rename_team(session.trainer, old_name, new_name) do
+            {:ok, updated_trainer} ->
+              IO.puts(" Team '#{old_name}' renamed to '#{new_name}'.")
+              save_trainer(updated_trainer)
+              %{session | trainer: updated_trainer}
+
+            {:error, msg} ->
+              IO.puts("  #{msg}")
+              session
+          end
+
+        _ ->
+          IO.puts("  Usage: rename_team <old_name> <new_name>")
+          session
+      end
+    end)
+  end
+
 end
