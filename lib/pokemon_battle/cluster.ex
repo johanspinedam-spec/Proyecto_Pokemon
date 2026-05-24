@@ -54,4 +54,10 @@ defmodule PokemonBattle.Cluster do
     end
   end
 
+  # Check if node is alive
+
+  def node_alive?(node) do
+    node in [Node.self() | Node.list()]
+  end
+
 end
