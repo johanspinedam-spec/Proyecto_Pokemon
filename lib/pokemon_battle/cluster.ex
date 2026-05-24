@@ -43,4 +43,15 @@ defmodule PokemonBattle.Cluster do
     nodes = [Node.self() | Node.list()]
     Enum.random(nodes)
   end
+
+  # Start battle on specific node
+
+  def start_battle_on_node(node, room_id, turn_time \\ 20) do
+    if node == Node.self() do
+      PokemonBattle.SupervisorBatallas.start_battle(room_id, turn_time)
+    else
+      :rpc.call(node, PokemonBattle.SupervisorBatallas, :start_battle, [room_id, turn_time])
+    end
+  end
+
 end
