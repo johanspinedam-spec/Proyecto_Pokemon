@@ -1,0 +1,608 @@
+[
+  {
+    "accumulated_coins": 30,
+    "coins": 30,
+    "inventory": [
+      {
+        "attack": 43,
+        "defense": 42,
+        "id": 497543,
+        "moves": [
+          {
+            "base_power": 90,
+            "name": "flamethrower",
+            "type": "Fire"
+          },
+          {
+            "base_power": 65,
+            "name": "fire_fang",
+            "type": "Fire"
+          },
+          {
+            "base_power": 40,
+            "name": "powder_snow",
+            "type": "Ice"
+          },
+          {
+            "base_power": 30,
+            "name": "ember",
+            "type": "Fire"
+          }
+        ],
+        "original_owner": "juan",
+        "rarity": "common",
+        "species": "vulpix",
+        "speed": 68,
+        "types": [
+          "Fire"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 36,
+        "defense": 31,
+        "id": 27183,
+        "moves": [
+          {
+            "base_power": 50,
+            "name": "cut",
+            "type": "Normal"
+          },
+          {
+            "base_power": 40,
+            "name": "quick_attack",
+            "type": "Normal"
+          },
+          {
+            "base_power": 80,
+            "name": "energy_ball",
+            "type": "Grass"
+          },
+          {
+            "base_power": 50,
+            "name": "flame_charge",
+            "type": "Fire"
+          }
+        ],
+        "original_owner": "juan",
+        "rarity": "common",
+        "species": "gastly",
+        "speed": 82,
+        "types": [
+          "Normal"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 66,
+        "defense": 60,
+        "id": 344210,
+        "moves": [
+          {
+            "base_power": 65,
+            "name": "fire_fang",
+            "type": "Fire"
+          },
+          {
+            "base_power": 30,
+            "name": "ember",
+            "type": "Fire"
+          },
+          {
+            "base_power": 150,
+            "name": "hyper_beam",
+            "type": "Normal"
+          },
+          {
+            "base_power": 50,
+            "name": "rock_throw",
+            "type": "Rock"
+          }
+        ],
+        "original_owner": "juan",
+        "rarity": "common",
+        "species": "charmeleon",
+        "speed": 82,
+        "types": [
+          "Fire"
+        ],
+        "wins": 0
+      }
+    ],
+    "packs": [],
+    "password": "12345",
+    "teams": [],
+    "username": "juan",
+    "wins": 0
+  },
+  {
+    "accumulated_coins": 130,
+    "coins": 130,
+    "inventory": [
+      {
+        "attack": 83,
+        "defense": 78,
+        "id": 885974,
+        "moves": [
+          {
+            "base_power": 70,
+            "name": "headbutt",
+            "type": "Normal"
+          },
+          {
+            "base_power": 75,
+            "name": "air_slash",
+            "type": "Flying"
+          },
+          {
+            "base_power": 90,
+            "name": "bug_buzz",
+            "type": "Bug"
+          },
+          {
+            "base_power": 40,
+            "name": "water_gun",
+            "type": "Water"
+          }
+        ],
+        "original_owner": "Juan",
+        "rarity": "common",
+        "species": "pidgeot",
+        "speed": 105,
+        "types": [
+          "Normal",
+          "Flying"
+        ],
+        "wins": 1
+      },
+      {
+        "attack": 88,
+        "defense": 106,
+        "id": 22077,
+        "moves": [
+          {
+            "base_power": 90,
+            "name": "surf",
+            "type": "Water"
+          },
+          {
+            "base_power": 40,
+            "name": "water_gun",
+            "type": "Water"
+          },
+          {
+            "base_power": 95,
+            "name": "heat_wave",
+            "type": "Fire"
+          },
+          {
+            "base_power": 40,
+            "name": "powder_snow",
+            "type": "Ice"
+          }
+        ],
+        "original_owner": "Juan",
+        "rarity": "common",
+        "species": "blastoise",
+        "speed": 83,
+        "types": [
+          "Water"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 37,
+        "defense": 32,
+        "id": 140271,
+        "moves": [
+          {
+            "base_power": 70,
+            "name": "headbutt",
+            "type": "Normal"
+          },
+          {
+            "base_power": 40,
+            "name": "quick_attack",
+            "type": "Normal"
+          },
+          {
+            "base_power": 65,
+            "name": "fire_fang",
+            "type": "Fire"
+          },
+          {
+            "base_power": 60,
+            "name": "fire_spin",
+            "type": "Fire"
+          }
+        ],
+        "original_owner": "Johan",
+        "rarity": "common",
+        "species": "gastly",
+        "speed": 85,
+        "types": [
+          "Normal"
+        ],
+        "wins": 0
+      }
+    ],
+    "packs": [],
+    "password": "12345",
+    "teams": [
+      {
+        "ids": [
+          "885974",
+          "22077",
+          "140271"
+        ],
+        "name": "Team1"
+      }
+    ],
+    "username": "Juan",
+    "wins": 1
+  },
+  {
+    "accumulated_coins": 390,
+    "coins": 140,
+    "inventory": [
+      {
+        "attack": 52,
+        "defense": 47,
+        "id": 398418,
+        "moves": [
+          {
+            "base_power": 60,
+            "name": "swift",
+            "type": "Normal"
+          },
+          {
+            "base_power": 40,
+            "name": "quick_attack",
+            "type": "Normal"
+          },
+          {
+            "base_power": 120,
+            "name": "megahorn",
+            "type": "Bug"
+          },
+          {
+            "base_power": 40,
+            "name": "thunder_wave",
+            "type": "Electric"
+          }
+        ],
+        "original_owner": "luis",
+        "rarity": "common",
+        "species": "haunter",
+        "speed": 99,
+        "types": [
+          "Normal"
+        ],
+        "wins": 3
+      },
+      {
+        "attack": 102,
+        "defense": 123,
+        "id": 740143,
+        "moves": [
+          {
+            "base_power": 50,
+            "name": "rock_throw",
+            "type": "Rock"
+          },
+          {
+            "base_power": 65,
+            "name": "bone_club",
+            "type": "Ground"
+          },
+          {
+            "base_power": 120,
+            "name": "megahorn",
+            "type": "Bug"
+          },
+          {
+            "base_power": 65,
+            "name": "ice_fang",
+            "type": "Ice"
+          }
+        ],
+        "original_owner": "luis",
+        "rarity": "common",
+        "species": "graveler",
+        "speed": 37,
+        "types": [
+          "Rock",
+          "Ground"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 58,
+        "defense": 48,
+        "id": 606477,
+        "moves": [
+          {
+            "base_power": 95,
+            "name": "heat_wave",
+            "type": "Fire"
+          },
+          {
+            "base_power": 30,
+            "name": "ember",
+            "type": "Fire"
+          },
+          {
+            "base_power": 45,
+            "name": "vine_whip",
+            "type": "Grass"
+          },
+          {
+            "base_power": 35,
+            "name": "tackle",
+            "type": "Normal"
+          }
+        ],
+        "original_owner": "luis",
+        "rarity": "rare",
+        "species": "charmander",
+        "speed": 73,
+        "types": [
+          "Fire"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 114,
+        "defense": 108,
+        "id": 563757,
+        "moves": [
+          {
+            "base_power": 90,
+            "name": "surf",
+            "type": "Water"
+          },
+          {
+            "base_power": 40,
+            "name": "water_gun",
+            "type": "Water"
+          },
+          {
+            "base_power": 120,
+            "name": "volt_tackle",
+            "type": "Electric"
+          },
+          {
+            "base_power": 95,
+            "name": "heat_wave",
+            "type": "Fire"
+          }
+        ],
+        "original_owner": "luis",
+        "rarity": "epic",
+        "species": "golduck",
+        "speed": 118,
+        "types": [
+          "Water"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 73,
+        "defense": 68,
+        "id": 652964,
+        "moves": [
+          {
+            "base_power": 60,
+            "name": "swift",
+            "type": "Normal"
+          },
+          {
+            "base_power": 150,
+            "name": "hyper_beam",
+            "type": "Normal"
+          },
+          {
+            "base_power": 40,
+            "name": "water_gun",
+            "type": "Water"
+          },
+          {
+            "base_power": 65,
+            "name": "bubble_beam",
+            "type": "Water"
+          }
+        ],
+        "original_owner": "luis",
+        "rarity": "rare",
+        "species": "gengar",
+        "speed": 124,
+        "types": [
+          "Normal"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 106,
+        "defense": 85,
+        "id": 20537,
+        "moves": [
+          {
+            "base_power": 40,
+            "name": "quick_attack",
+            "type": "Normal"
+          },
+          {
+            "base_power": 70,
+            "name": "headbutt",
+            "type": "Normal"
+          },
+          {
+            "base_power": 50,
+            "name": "cut",
+            "type": "Normal"
+          },
+          {
+            "base_power": 60,
+            "name": "bite",
+            "type": "Bug"
+          }
+        ],
+        "original_owner": "ana",
+        "rarity": "common",
+        "species": "machoke",
+        "speed": 48,
+        "types": [
+          "Normal"
+        ],
+        "wins": 0
+      }
+    ],
+    "packs": [],
+    "password": "1234",
+    "teams": [
+      {
+        "ids": [
+          "398418",
+          "146925",
+          "740143"
+        ],
+        "name": "miteam"
+      },
+      {
+        "ids": [
+          "398418",
+          "146925",
+          "740143"
+        ],
+        "name": "team2"
+      }
+    ],
+    "username": "luis",
+    "wins": 3
+  },
+  {
+    "accumulated_coins": 350,
+    "coins": 350,
+    "inventory": [
+      {
+        "attack": 88,
+        "defense": 106,
+        "id": 286622,
+        "moves": [
+          {
+            "base_power": 80,
+            "name": "waterfall",
+            "type": "Water"
+          },
+          {
+            "base_power": 90,
+            "name": "surf",
+            "type": "Water"
+          },
+          {
+            "base_power": 50,
+            "name": "rock_throw",
+            "type": "Rock"
+          },
+          {
+            "base_power": 80,
+            "name": "seed_bomb",
+            "type": "Grass"
+          }
+        ],
+        "original_owner": "ana",
+        "rarity": "common",
+        "species": "blastoise",
+        "speed": 83,
+        "types": [
+          "Water"
+        ],
+        "wins": 1
+      },
+      {
+        "attack": 106,
+        "defense": 85,
+        "id": 20537,
+        "moves": [
+          {
+            "base_power": 40,
+            "name": "quick_attack",
+            "type": "Normal"
+          },
+          {
+            "base_power": 70,
+            "name": "headbutt",
+            "type": "Normal"
+          },
+          {
+            "base_power": 50,
+            "name": "cut",
+            "type": "Normal"
+          },
+          {
+            "base_power": 60,
+            "name": "bite",
+            "type": "Bug"
+          }
+        ],
+        "original_owner": "ana",
+        "rarity": "common",
+        "species": "machoke",
+        "speed": 48,
+        "types": [
+          "Normal"
+        ],
+        "wins": 0
+      },
+      {
+        "attack": 58,
+        "defense": 48,
+        "id": 606477,
+        "moves": [
+          {
+            "base_power": 95,
+            "name": "heat_wave",
+            "type": "Fire"
+          },
+          {
+            "base_power": 30,
+            "name": "ember",
+            "type": "Fire"
+          },
+          {
+            "base_power": 45,
+            "name": "vine_whip",
+            "type": "Grass"
+          },
+          {
+            "base_power": 35,
+            "name": "tackle",
+            "type": "Normal"
+          }
+        ],
+        "original_owner": "luis",
+        "rarity": "rare",
+        "species": "charmander",
+        "speed": 73,
+        "types": [
+          "Fire"
+        ],
+        "wins": 0
+      }
+    ],
+    "packs": [],
+    "password": "1234",
+    "teams": [
+      {
+        "ids": [
+          "286622",
+          "20537",
+          "606477"
+        ],
+        "name": "miteam"
+      }
+    ],
+    "username": "ana",
+    "wins": 2
+  }
+]
