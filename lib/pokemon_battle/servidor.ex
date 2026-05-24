@@ -191,4 +191,9 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("evolution " <> species, session) do
+    Evolution.show_evolution_chain(String.trim(species))
+    session
+  end
 end
