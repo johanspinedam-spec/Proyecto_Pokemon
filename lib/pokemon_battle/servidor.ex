@@ -559,4 +559,39 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("confirm_trade", session) do
+    with_session(session, fn ->
+      case session.trade_room do
+        nil ->
+          IO.puts(" You are not in a trade room. Use create_trade_room or join_trade_room first.")
+          session
+
+        code ->
+          result = route_to_primary(
+            fn -> Intercambio.confirm(code, session.trainer["username"]) end,
+            fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :confirm, [code, session.trainer["username"]]) end
+          )
+
+          case result do
+            {:completed, result_map} ->
+              received = result_map[session.trainer["username"]]
+              trade_state = route_to_primary(
+                fn -> Intercambio.get_state(code) end,
+                fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :get_state, [code]) end
+              )
+              offered = trade_state.offers[session.trainer["username"]]
+              update_inventory_after_trade(session, offered, received)
+
+            :ok ->
+              IO.puts("Confirmed. Waiting for the other trainer...")
+              wait_for_trade_completion(session)
+
+            {:error, msg} ->
+              IO.puts("Error: #{msg}")
+              session
+          end
+      end
+    end)
+  end
 end
