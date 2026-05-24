@@ -181,4 +181,30 @@ defmodule PokemonBattle.GestorEntrenadores do
     end
   end
 
+  # UPDATE — quitar pokemon del equipo
+  def remove_pokemon_from_team(trainer, team_name, pokemon_id) do
+    teams = trainer["teams"]
+
+    case Enum.find(teams, fn t -> t["name"] == team_name end) do
+      nil ->
+        {:error, "Team '#{team_name}' not found"}
+
+      team ->
+        cond do
+          not (to_string(pokemon_id) in Enum.map(team["ids"], &to_string/1)) ->
+            {:error, "Pokemon ##{pokemon_id} is not in team '#{team_name}'"}
+
+          length(team["ids"]) <= 1 ->
+            {:error, "Cannot remove the last Pokemon from a team. Delete the team instead."}
+
+          true ->
+            new_ids = Enum.reject(team["ids"], fn id -> to_string(id) == to_string(pokemon_id) end)
+            updated_teams = Enum.map(teams, fn t ->
+              if t["name"] == team_name, do: Map.put(t, "ids", new_ids), else: t
+            end)
+            {:ok, Map.put(trainer, "teams", updated_teams)}
+        end
+    end
+  end
+
 end
