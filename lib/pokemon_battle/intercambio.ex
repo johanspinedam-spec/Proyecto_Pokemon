@@ -49,4 +49,33 @@ defmodule PokemonBattle.Intercambio do
     GenServer.call(via(code), :get_state)
   end
 
+  def handle_call({:join, trainer, pid}, _from, state) do
+    username = trainer["username"]
+    creator  = List.first(Map.keys(state.participants))
+
+    cond do
+      map_size(state.participants) >= 2 ->
+        {:reply, {:error, "Trade room already has 2 participants"}, state}
+
+      Map.has_key?(state.participants, username) ->
+        {:reply, {:error, "You are already in this room"}, state}
+
+      creator == username ->
+        {:reply, {:error, "You cannot join your own trade room"}, state}
+
+      true ->
+        new_state = state
+          |> put_in([:participants, username], trainer)
+          |> put_in([:pids, username], pid)
+
+        IO.puts("[Trade #{state.code}] #{username} joined.")
+
+        if map_size(new_state.participants) == 2 do
+          IO.puts("[Trade #{state.code}] Both trainers connected. You can now trade.")
+        end
+
+        {:reply, :ok, new_state}
+    end
+  end
+  
 end
