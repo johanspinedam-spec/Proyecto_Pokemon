@@ -59,5 +59,10 @@ defmodule PokemonBattle.GestorEntrenadores do
     end)
   end
 
+  def add_coins(trainer, amount) do
+    trainer
+    |> Map.put("coins", trainer["coins"] + amount)
+    |> Map.put("accumulated_coins", trainer["accumulated_coins"] + amount)
+  end
 
 end
