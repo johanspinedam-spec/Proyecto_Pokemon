@@ -334,4 +334,8 @@ defmodule PokemonBattle.Batalla do
       true    -> state
     end
   end
+
+  defp all_fainted?(team), do: Enum.all?(team, &MotorCombate.fainted?/1)
+
+  defp active_fainted?(state, username), do: MotorCombate.fainted?(state.actives[username])
 end
