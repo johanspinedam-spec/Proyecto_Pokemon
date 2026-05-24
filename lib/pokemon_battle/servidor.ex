@@ -385,4 +385,23 @@ defmodule PokemonBattle.Servidor do
     session
   end
 
+  defp process("create_room " <> turn_time, session) do
+    with_session(session, fn ->
+      time   = turn_time |> String.trim() |> String.to_integer()
+      result = route_to_primary(
+        fn -> GestorSalas.create_room(time) end,
+        fn -> :rpc.call(get_primary_node(), PokemonBattle.GestorSalas, :create_room, [time]) end
+      )
+
+      case result do
+        {:ok, room_id} ->
+          IO.puts("Room #{room_id} created.")
+          %{session | current_room: room_id}
+
+        {:error, msg} ->
+          IO.puts("Error: #{msg}")
+          session
+      end
+    end)
+  end
 end
