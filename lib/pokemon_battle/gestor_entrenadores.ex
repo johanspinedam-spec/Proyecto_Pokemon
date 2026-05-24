@@ -151,4 +151,34 @@ defmodule PokemonBattle.GestorEntrenadores do
     end
   end
 
+  # UPDATE — agregar pokemon al equipo
+  def add_pokemon_to_team(trainer, team_name, pokemon_id) do
+    teams = trainer["teams"]
+
+    case Enum.find(teams, fn t -> t["name"] == team_name end) do
+      nil ->
+        {:error, "Team '#{team_name}' not found"}
+
+      team ->
+        cond do
+          length(team["ids"]) >= 3 ->
+            {:error, "Team '#{team_name}' is already full (3/3)"}
+
+          to_string(pokemon_id) in Enum.map(team["ids"], &to_string/1) ->
+            {:error, "Pokemon ##{pokemon_id} is already in this team"}
+
+          not Enum.any?(trainer["inventory"], fn p -> to_string(p["id"]) == to_string(pokemon_id) end) ->
+            {:error, "Pokemon ##{pokemon_id} not found in your inventory"}
+
+          true ->
+            updated_teams = Enum.map(teams, fn t ->
+              if t["name"] == team_name,
+                do: Map.put(t, "ids", t["ids"] ++ [to_string(pokemon_id)]),
+                else: t
+            end)
+            {:ok, Map.put(trainer, "teams", updated_teams)}
+        end
+    end
+  end
+
 end
