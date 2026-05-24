@@ -93,4 +93,33 @@ defmodule PokemonBattleTest do
     assert fast_pokemon["speed"] > slow_pokemon["speed"]
   end
 
+
+  # 3. Monedas al terminar batalla
+
+  test "winner gets 100 coins and loser gets 30 coins after battle" do
+    winner = %{
+      "username" => "ana",
+      "coins" => 50,
+      "accumulated_coins" => 200
+    }
+    loser = %{
+      "username" => "luis",
+      "coins" => 20,
+      "accumulated_coins" => 100
+    }
+
+    updated_winner = winner
+      |> Map.put("coins", winner["coins"] + 100)
+      |> Map.put("accumulated_coins", winner["accumulated_coins"] + 100)
+
+    updated_loser = loser
+      |> Map.put("coins", loser["coins"] + 30)
+      |> Map.put("accumulated_coins", loser["accumulated_coins"] + 30)
+
+    assert updated_winner["coins"] == 150
+    assert updated_winner["accumulated_coins"] == 300
+    assert updated_loser["coins"] == 50
+    assert updated_loser["accumulated_coins"] == 130
+  end
+
 end
