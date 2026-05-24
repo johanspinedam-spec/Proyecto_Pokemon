@@ -29,4 +29,24 @@ defmodule PokemonBattle.Intercambio do
     end
   end
 
+  def join(code, trainer, pid \\ self()) do
+    GenServer.call(via(code), {:join, trainer, pid})
+  end
+
+  def offer(code, username, pokemon) do
+    GenServer.call(via(code), {:offer, username, pokemon})
+  end
+
+  def confirm(code, username) do
+    GenServer.call(via(code), {:confirm, username})
+  end
+
+  def cancel(code, username) do
+    GenServer.call(via(code), {:cancel, username})
+  end
+
+  def get_state(code) do
+    GenServer.call(via(code), :get_state)
+  end
+
 end
