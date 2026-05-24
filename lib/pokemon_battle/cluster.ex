@@ -60,4 +60,12 @@ defmodule PokemonBattle.Cluster do
     node in [Node.self() | Node.list()]
   end
 
+  # Cluster info
+
+  def info do
+    IO.puts("\n=== Cluster Info ===")
+    IO.puts("  Current node:     #{Node.self()}")
+    IO.puts("  Connected nodes:  #{length(Node.list())}")
+    IO.puts("  Active battles:   #{PokemonBattle.SupervisorBatallas.battle_count()}")
+  end
 end
