@@ -176,4 +176,19 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("open_pack " <> id, session) do
+    with_session(session, fn ->
+      case SistemaSobres.open_pack(session.trainer, String.trim(id)) do
+        {:ok, updated_trainer, pokemon_list} ->
+          SistemaSobres.show_pack_result(pokemon_list, session.trainer["username"])
+          save_trainer(updated_trainer)
+          %{session | trainer: updated_trainer}
+
+        {:error, msg} ->
+          IO.puts("Error: #{msg}")
+          session
+      end
+    end)
+  end
 end
