@@ -83,4 +83,32 @@ defmodule PokemonBattle.GestorEntrenadores do
     end)
   end
 
+  # --- CRUD EQUIPOS ---
+
+  # CREATE
+  def create_team(trainer, name, ids) do
+    teams = trainer["teams"]
+
+    cond do
+      Enum.any?(teams, fn t -> t["name"] == name end) ->
+        {:error, "A team named '#{name}' already exists"}
+
+      length(ids) < 1 or length(ids) > 3 ->
+        {:error, "Team must have between 1 and 3 Pokemon"}
+
+      true ->
+        inventory_ids = Enum.map(trainer["inventory"], fn p -> to_string(p["id"]) end)
+        invalid_ids   = Enum.reject(ids, fn id -> to_string(id) in inventory_ids end)
+
+        if length(invalid_ids) > 0 do
+          {:error, "Pokemon not found in inventory: #{Enum.join(invalid_ids, ", ")}"}
+        else
+          new_team = %{"name" => name, "ids" => ids}
+          {:ok, Map.put(trainer, "teams", [new_team | teams])}
+        end
+    end
+  end
+
+  
+
 end
