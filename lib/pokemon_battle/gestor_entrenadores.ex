@@ -40,4 +40,24 @@ defmodule PokemonBattle.GestorEntrenadores do
     """)
   end
 
+  def show_inventory(trainer) do
+    inventory = trainer["inventory"]
+    IO.puts("\n=== Inventory of #{trainer["username"]} (#{length(inventory)} Pokemon) ===")
+
+    inventory
+    |> Enum.with_index(1)
+    |> Enum.each(fn {pokemon, index} ->
+      types = Enum.join(pokemon["types"], "/")
+      moves = pokemon["moves"]
+              |> Enum.map(fn m -> "#{m["name"]}(#{m["base_power"]})" end)
+              |> Enum.join(", ")
+
+      IO.puts("  #{index}. [##{pokemon["id"]}] #{String.capitalize(pokemon["species"])} (#{types}) [#{pokemon["rarity"]}]")
+      IO.puts("     Attack: #{pokemon["attack"]} | Defense: #{pokemon["defense"]} | Speed: #{pokemon["speed"]} | Max HP: 100")
+      IO.puts("     Original owner: #{pokemon["original_owner"]}")
+      IO.puts("     Wins: #{pokemon["wins"]} | Moves: #{moves}")
+    end)
+  end
+
+
 end
