@@ -27,6 +27,17 @@ defmodule PokemonBattle.GestorEntrenadores do
         end
     end
   end
-  
+
+  def show_profile(trainer) do
+    IO.puts("""
+
+    === Profile of #{trainer["username"]} ===
+    Wins:                 #{trainer["wins"]}
+    Coins:                #{trainer["coins"]}
+    Accumulated coins:    #{trainer["accumulated_coins"]}
+    Pending packs:        #{length(trainer["packs"])}
+    Pokemon in inventory: #{length(trainer["inventory"])}
+    """)
+  end
 
 end
