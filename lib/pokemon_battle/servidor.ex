@@ -639,5 +639,8 @@ defmodule PokemonBattle.Servidor do
     if get_primary_node() == Node.self(), do: local_fn.(), else: remote_fn.()
   end
 
-  
+  defp get_primary_node do
+    nodes = [Node.self() | Node.list()]
+    Enum.find(nodes, Node.self(), fn n -> to_string(n) |> String.contains?("node1") end)
+  end
 end
