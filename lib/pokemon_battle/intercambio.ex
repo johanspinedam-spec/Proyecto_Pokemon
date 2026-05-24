@@ -21,4 +21,12 @@ defmodule PokemonBattle.Intercambio do
     {:ok, state}
   end
 
+   def create(code) do
+    spec = {__MODULE__, [code: code]}
+    case DynamicSupervisor.start_child(PokemonBattle.SupervisorBatallas, spec) do
+      {:ok, _pid} -> :ok
+      {:error, _} -> {:error, "Could not create trade room"}
+    end
+  end
+
 end
