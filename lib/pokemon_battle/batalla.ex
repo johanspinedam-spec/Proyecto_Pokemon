@@ -442,4 +442,9 @@ defmodule PokemonBattle.Batalla do
     end)
     put_in(state.teams[username], new_team)
   end
+
+  defp start_timer(seconds), do: Process.send_after(self(), :turn_timeout, seconds * 1_000)
+  defp cancel_timer(nil),    do: :ok
+  defp cancel_timer(timer),  do: Process.cancel_timer(timer)
+
 end
