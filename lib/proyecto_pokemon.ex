@@ -1,18 +1,24 @@
-defmodule ProyectoPokemon do
-  @moduledoc """
-  Documentation for `ProyectoPokemon`.
-  """
+defmodule PokemonBattle.Application do
+  use Application
 
-  @doc """
-  Hello world.
+  def start(_type, _args) do
+    children = [
+      {Registry, keys: :unique, name: PokemonBattle.Registry},
+      PokemonBattle.SupervisorBatallas,
+    ]
 
-  ## Examples
+    children = if Node.self() == :nonode@nohost or primary_node?() do
+      children ++ [PokemonBattle.GestorSalas]
+    else
+      children
+    end
 
-      iex> ProyectoPokemon.hello()
-      :world
+    opts = [strategy: :one_for_one, name: PokemonBattle.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
 
-  """
-  def hello do
-    :world
+  defp primary_node? do
+    node_name = Node.self() |> to_string()
+    String.contains?(node_name, "node1")
   end
 end
