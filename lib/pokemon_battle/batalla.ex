@@ -338,4 +338,38 @@ defmodule PokemonBattle.Batalla do
   defp all_fainted?(team), do: Enum.all?(team, &MotorCombate.fainted?/1)
 
   defp active_fainted?(state, username), do: MotorCombate.fainted?(state.actives[username])
+
+   defp end_battle(state, winner, reason) do
+    [loser]  = Map.keys(state.players) |> Enum.reject(&(&1 == winner))
+    duration = DateTime.diff(DateTime.utc_now(), state.started_at)
+
+    broadcast(state, """
+
+    ════════════════════════════════
+    Battle ended! (#{reason})
+    Winner: #{winner}
+    Turns: #{state.turn} | Node: #{state.node} | Duration: #{duration}s
+    Rewards → #{winner}: +100 coins | #{loser}: +30 coins
+    ════════════════════════════════
+    """)
+
+    update_winner_pokemon(state, winner)
+
+    Persistencia.log_battle(%{
+      date:     DateTime.to_string(DateTime.utc_now()),
+      player1:  winner,
+      player2:  loser,
+      winner:   winner,
+      turns:    state.turn,
+      node:     to_string(state.node),
+      duration: "#{duration}s"
+    })
+
+    # Notificar a cada jugador para que recargue su perfil desde el archivo
+    Enum.each(state.players, fn {username, _} ->
+      notify_player_raw(state, username, {:refresh_trainer, username})
+    end)
+
+    %{state | phase: :finished}
+  end
 end
