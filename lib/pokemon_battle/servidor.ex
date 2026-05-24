@@ -50,7 +50,7 @@ defmodule PokemonBattle.Servidor do
         case Enum.find(trainers, fn t -> t["username"] == username end) do
           nil     -> flush_battle_events(session)
           trainer ->
-            IO.puts("\n✅ Profile updated — Coins: #{trainer["coins"]} | Wins: #{trainer["wins"]}")
+            IO.puts("\nProfile updated — Coins: #{trainer["coins"]} | Wins: #{trainer["wins"]}")
             # Retornar la sesión actualizada
             throw({:updated_session, %{session | trainer: trainer, current_room: nil}})
         end
@@ -58,6 +58,58 @@ defmodule PokemonBattle.Servidor do
     after
       0 -> session
     end
+  end
+
+  defp process("play", session) do
+    IO.puts("""
+    SESSION
+      login <username> <password>
+      logout
+      profile
+      leaderboard
+
+    INVENTORY & PACKS
+      inventory
+      shop
+      buy_pack <basic|advanced>
+      open_pack <id|last>
+
+    EVOLUTION
+      evolution <species>
+
+    TEAMS
+      create_team <name> <ids>
+      show_team <name>
+      list_teams
+      use_team <name>
+      add_to_team <name> <id>
+      remove_from_team <name> <id>
+      rename_team <old_name> <new_name>
+      delete_team <name>
+
+
+    BATTLE
+      create_room <seconds>
+      list_rooms
+      join_room <room_id>
+      start_battle <room_id>
+      attack <move_name>
+      switch <pokemon_id>
+      surrender
+
+    TRADE
+      create_trade_room
+      join_trade_room <code>
+      offer_pokemon <pokemon_id>
+      confirm_trade
+      cancel_trade
+
+    CLUSTER
+      connect_node <node@host>
+      list_nodes
+      cluster_info
+    """)
+    session
   end
 
 end
