@@ -126,4 +126,8 @@ defmodule PokemonBattle.Servidor do
     session
   end
 
+  defp process("inventory", session) do
+    with_session(session, fn -> GestorEntrenadores.show_inventory(session.trainer) end)
+  end
+
 end
