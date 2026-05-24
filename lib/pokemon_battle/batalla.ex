@@ -191,4 +191,51 @@ defmodule PokemonBattle.Batalla do
       {:noreply, state}
     end
   end
+
+  defp resolve_turn(state) do
+    [p1, p2]  = Map.keys(state.players)
+    action_p1 = Map.get(state.actions, p1, :pass)
+    action_p2 = Map.get(state.actions, p2, :pass)
+    spd_p1    = state.actives[p1]["speed"]
+    spd_p2    = state.actives[p2]["speed"]
+
+    {first, second, act_first, act_second} =
+      cond do
+        spd_p1 > spd_p2 ->
+          {p1, p2, action_p1, action_p2}
+        spd_p2 > spd_p1 ->
+          {p2, p1, action_p2, action_p1}
+        :rand.uniform(2) == 1 ->
+          {p1, p2, action_p1, action_p2}
+        true ->
+          {p2, p1, action_p2, action_p1}
+      end
+
+    broadcast(state, "\n─── Resolving turn #{state.turn} ───")
+
+    state1 = execute_action(state, first, second, act_first)
+
+    state2 =
+      if active_fainted?(state1, second), do: state1,
+      else: execute_action(state1, second, first, act_second)
+
+    state3 = check_end(state2)
+
+    if state3.phase == :in_progress do
+      # Verificar si algún Pokémon activo quedó debilitado
+      state4 = check_pending_switches(state3)
+
+      if Enum.any?(state4.pending_switch, fn {_, v} -> v == true end) do
+        # Hay jugadores que deben cambiar de Pokémon
+        state4
+      else
+        clean_state = %{state4 | actions: %{}, turn: state4.turn + 1}
+        show_current_turn(clean_state)
+        timer = start_timer(state4.turn_time)
+        %{clean_state | timer: timer}
+      end
+    else
+      state3
+    end
+  end
 end
