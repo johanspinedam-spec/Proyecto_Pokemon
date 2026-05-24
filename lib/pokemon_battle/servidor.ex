@@ -162,4 +162,18 @@ defmodule PokemonBattle.Servidor do
     session
   end
 
+  defp process("buy_pack " <> type, session) do
+    with_session(session, fn ->
+      case SistemaSobres.buy_pack(session.trainer, String.trim(type)) do
+        {:ok, updated_trainer, pack} ->
+          IO.puts("#{pack["type"]} pack purchased! Pack id: #{pack["id"]}")
+          save_trainer(updated_trainer)
+          %{session | trainer: updated_trainer}
+
+        {:error, msg} ->
+          IO.puts("Error: #{msg}")
+          session
+      end
+    end)
+  end
 end
