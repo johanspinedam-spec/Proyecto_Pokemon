@@ -51,4 +51,28 @@ defmodule PokemonBattle.Batalla do
   def get_state(room_id) do
     GenServer.call(via(room_id), :get_state)
   end
+
+  def handle_call({:join, trainer, team, pid}, _from, state) do
+    players = state.players
+
+    cond do
+      map_size(players) >= 2 ->
+        {:reply, {:error, "Room is full"}, state}
+
+      Map.has_key?(players, trainer["username"]) ->
+        {:reply, {:error, "Already in this room"}, state}
+
+      true ->
+        team_init = MotorCombate.initialize_team(team)
+        new_state = state
+          |> put_in([:players, trainer["username"]], trainer)
+          |> put_in([:teams, trainer["username"]], team_init)
+          |> put_in([:actives, trainer["username"]], hd(team_init))
+          |> put_in([:pids, trainer["username"]], pid)
+
+        notify_player(new_state, trainer["username"],
+          "[Room #{state.room_id}] You joined the battle. Waiting for opponent...")
+        {:reply, :ok, new_state}
+    end
+  end
 end
