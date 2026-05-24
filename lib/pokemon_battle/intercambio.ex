@@ -121,5 +121,13 @@ defmodule PokemonBattle.Intercambio do
     end
   end
 
-  
+  def handle_call({:cancel, username}, _from, state) do
+    broadcast(state, "[Trade #{state.code}] #{username} cancelled the trade. Room closed.")
+    {:reply, :cancelled, state}
+  end
+
+  def handle_call(:get_state, _from, state) do
+    {:reply, state, state}
+  end
+
 end
