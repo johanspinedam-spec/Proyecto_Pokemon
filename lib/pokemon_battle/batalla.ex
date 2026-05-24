@@ -148,4 +148,10 @@ defmodule PokemonBattle.Batalla do
         end
     end
   end
+
+  def handle_call({:surrender, username}, _from, state) do
+    [winner] = Map.keys(state.players) |> Enum.reject(&(&1 == username))
+    new_state = end_battle(state, winner, "surrender")
+    {:reply, :ok, new_state}
+  end
 end
