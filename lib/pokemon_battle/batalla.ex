@@ -75,4 +75,16 @@ defmodule PokemonBattle.Batalla do
         {:reply, :ok, new_state}
     end
   end
+
+  def handle_call(:start, _from, state) do
+    if map_size(state.players) < 2 do
+      {:reply, {:error, "Need 2 players to start"}, state}
+    else
+      new_state = %{state | phase: :in_progress, turn: 1}
+      broadcast(new_state, "\n  Battle started! Get ready!")
+      show_current_turn(new_state)
+      timer = start_timer(state.turn_time)
+      {:reply, :ok, %{new_state | timer: timer}}
+    end
+  end
 end
