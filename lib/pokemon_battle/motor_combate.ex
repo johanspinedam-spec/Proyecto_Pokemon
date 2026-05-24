@@ -44,4 +44,61 @@ defmodule PokemonBattle.MotorCombate do
     max(trunc(base_damage * eff * stab_bonus * rand_factor), 1)
   end
 
+  def effectiveness_message(move_type, defender_types) do
+    case effectiveness(move_type, defender_types) do
+      e when e >= 2.0 -> "It's super effective!"
+      e when e <= 0.5 -> "It's not very effective..."
+      _               -> ""
+    end
+  end
+
+  def fainted?(pokemon), do: pokemon["current_hp"] <= 0
+
+  def apply_damage(pokemon, damage) do
+    Map.put(pokemon, "current_hp", max(pokemon["current_hp"] - damage, 0))
+  end
+
+  def initialize_team(team) do
+    Enum.map(team, fn pokemon -> Map.put(pokemon, "current_hp", 100) end)
+  end
+
+  def build_turn_message(turn, rival, my_pokemon, my_team, rival_team) do
+    moves_text =
+      my_pokemon["moves"]
+      |> Enum.with_index(1)
+      |> Enum.map_join("\n", fn {m, idx} ->
+        "  #{idx}. #{String.pad_trailing(m["name"], 16)} (#{m["type"]}, power #{m["base_power"]})"
+      end)
+
+    """
+
+    ═══ Turn #{turn} ═══
+    Rival: #{String.capitalize(rival["species"])} (#{Enum.join(rival["types"], "/")}) | HP: #{rival["current_hp"]}/100
+    Rival team: #{team_summary(rival_team)}
+
+    Your Pokemon: [##{my_pokemon["id"]}] #{String.capitalize(my_pokemon["species"])} (#{Enum.join(my_pokemon["types"], "/")}) | Owner: #{my_pokemon["original_owner"]} | HP: #{my_pokemon["current_hp"]}/100 | Spd: #{my_pokemon["speed"]}
+    Your team:    #{team_summary(my_team)}
+    Moves:
+    #{moves_text}
+
+    Action > (attack <move> | switch <id> | surrender)
+    """
+  end
+
+  def show_turn(turn, rival, my_pokemon, my_team, rival_team) do
+    IO.puts(build_turn_message(turn, rival, my_pokemon, my_team, rival_team))
+  end
+
+  defp team_summary(team) do
+    team
+    |> Enum.map(fn p ->
+      name = String.capitalize(p["species"])
+      cond do
+        Map.get(p, "active") -> "#{name}(active)"
+        fainted?(p)          -> "#{name}(fainted)"
+        true                 -> "#{name}(alive)"
+      end
+    end)
+    |> Enum.join(" | ")
+  end
 end
