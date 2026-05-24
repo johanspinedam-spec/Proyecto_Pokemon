@@ -643,4 +643,17 @@ defmodule PokemonBattle.Servidor do
     nodes = [Node.self() | Node.list()]
     Enum.find(nodes, Node.self(), fn n -> to_string(n) |> String.contains?("node1") end)
   end
+
+  defp with_session(session, fun) do
+    if session.trainer == nil do
+      IO.puts("You must login first. Use: login <username> <password>")
+      session
+    else
+      result = fun.()
+      case result do
+        %PokemonBattle.Servidor{} -> result
+        _                         -> session
+      end
+    end
+  end
 end
