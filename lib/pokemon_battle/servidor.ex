@@ -627,4 +627,11 @@ defmodule PokemonBattle.Servidor do
     Cluster.info()
     session
   end
+
+  defp process(input, session) do
+    if input != "" do
+      IO.puts("Unknown command: '#{input}'. Type 'play' to see all available commands.")
+    end
+    session
+  end
 end
