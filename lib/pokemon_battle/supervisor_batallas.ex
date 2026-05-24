@@ -32,4 +32,18 @@ defmodule PokemonBattle.SupervisorBatallas do
     end
   end
 
+  # Stop a battle
+
+  def stop_battle(room_id) do
+    case Registry.lookup(PokemonBattle.Registry, {:battle, room_id}) do
+      [{pid, _}] ->
+        DynamicSupervisor.terminate_child(__MODULE__, pid)
+        IO.puts("[Supervisor] Battle #{room_id} stopped.")
+        :ok
+
+      [] ->
+        {:error, "Battle not found"}
+    end
+  end
+
 end
