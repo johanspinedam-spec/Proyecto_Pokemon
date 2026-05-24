@@ -138,4 +138,15 @@ defmodule PokemonBattle.SistemaSobres do
     min + :rand.uniform(max - min + 1) - 1
   end
 
+  # Random species
+
+  defp random_species do
+    catalog = Persistencia.read_pokemon()
+    catalog
+    |> Map.keys()
+    |> Enum.random()
+  end
+
+  
+
 end
