@@ -109,6 +109,27 @@ defmodule PokemonBattle.GestorEntrenadores do
     end
   end
 
-  
+  # READ
+  def list_teams(trainer) do
+    teams = trainer["teams"]
+
+    IO.puts("\n=== Saved teams of #{trainer["username"]} ===")
+
+    if teams == [] do
+      IO.puts("  (no teams yet)")
+    else
+      Enum.each(teams, fn t ->
+        ids = Enum.join(t["ids"], ", ")
+        IO.puts("  #{t["name"]} [#{length(t["ids"])}/3]: #{ids}")
+      end)
+    end
+  end
+
+  def get_team(trainer, name) do
+    case Enum.find(trainer["teams"], fn t -> t["name"] == name end) do
+      nil  -> {:error, "Team '#{name}' not found"}
+      team -> {:ok, team}
+    end
+  end
 
 end
