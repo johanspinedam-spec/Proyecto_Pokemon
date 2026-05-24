@@ -46,4 +46,16 @@ defmodule PokemonBattle.SupervisorBatallas do
     end
   end
 
+  # List active battles
+
+  def list_battles do
+    DynamicSupervisor.which_children(__MODULE__)
+    |> Enum.map(fn {_, pid, _, _} -> pid end)
+    |> Enum.filter(&Process.alive?/1)
+  end
+
+  def battle_count do
+    length(list_battles())
+  end
+
 end
