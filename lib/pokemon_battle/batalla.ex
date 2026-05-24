@@ -372,4 +372,33 @@ defmodule PokemonBattle.Batalla do
 
     %{state | phase: :finished}
   end
+
+  defp update_winner_pokemon(state, winner) do
+    trainers = Persistencia.read_trainers()
+
+    updated_trainers = Enum.map(trainers, fn t ->
+      if t["username"] == winner do
+        active_pokemon = state.actives[winner]
+
+        updated_inventory = Enum.map(t["inventory"], fn p ->
+          if p["id"] == active_pokemon["id"],
+            do: Map.put(p, "wins", (p["wins"] || 0) + 1),
+            else: p
+        end)
+
+        t
+        |> Map.put("inventory", updated_inventory)
+        |> Map.put("wins", t["wins"] + 1)
+        |> Map.put("coins", t["coins"] + 100)
+        |> Map.put("accumulated_coins", t["accumulated_coins"] + 100)
+        |> Evolution.check_evolutions()
+      else
+        t
+        |> Map.put("coins", t["coins"] + 30)
+        |> Map.put("accumulated_coins", t["accumulated_coins"] + 30)
+      end
+    end)
+
+    Persistencia.save_trainers(updated_trainers)
+  end
 end
