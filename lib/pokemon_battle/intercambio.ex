@@ -90,4 +90,36 @@ defmodule PokemonBattle.Intercambio do
         {:reply, :ok, new_state}
     end
   end
+
+  def handle_call({:confirm, username}, _from, state) do
+    cond do
+      not Map.has_key?(state.participants, username) ->
+        {:reply, {:error, "You are not in this room"}, state}
+
+      not Map.has_key?(state.offers, username) ->
+        {:reply, {:error, "You must offer a Pokemon before confirming"}, state}
+
+      username in state.confirmed ->
+        {:reply, {:error, "You already confirmed your offer"}, state}
+
+      true ->
+        confirmed = [username | state.confirmed]
+        new_state = %{state | confirmed: confirmed}
+
+        if length(confirmed) == 2 do
+          result = execute_trade(new_state)
+          # Notificar a cada jugador con su resultado via PID
+          Enum.each(new_state.pids, fn {user, pid} ->
+            received = result[user]
+            send(pid, {:trade_completed, received})
+          end)
+          {:reply, {:completed, result}, new_state}
+        else
+          broadcast(new_state, "[Trade #{state.code}] #{username} confirmed. Waiting for the other trainer...")
+          {:reply, :ok, new_state}
+        end
+    end
+  end
+
+  
 end
