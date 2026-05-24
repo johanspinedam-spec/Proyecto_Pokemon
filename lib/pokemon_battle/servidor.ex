@@ -117,4 +117,8 @@ defmodule PokemonBattle.Servidor do
     %{session | trainer: nil, current_team: nil, current_room: nil, trade_room: nil}
   end
 
+  defp process("profile", session) do
+    with_session(session, fn -> GestorEntrenadores.show_profile(session.trainer) end)
+  end
+
 end
