@@ -105,4 +105,16 @@ defmodule PokemonBattle.GestorSalas do
         end
     end
   end
+
+  def handle_call(:list, _from, state) do
+    rooms = state.rooms |> Map.values() |> Enum.filter(fn r -> r.phase == :waiting end)
+
+    IO.puts("\n=== Available rooms ===")
+    if rooms == [], do: IO.puts("  (no rooms available)"),
+    else: Enum.each(rooms, fn r ->
+      IO.puts("  #{r.id} | Players: #{length(r.players)}/2 | Turn time: #{r.turn_time}s")
+    end)
+
+    {:reply, rooms, state}
+  end
 end
