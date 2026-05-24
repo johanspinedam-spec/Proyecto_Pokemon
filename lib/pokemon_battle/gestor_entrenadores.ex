@@ -132,4 +132,23 @@ defmodule PokemonBattle.GestorEntrenadores do
     end
   end
 
+  # UPDATE — renombrar equipo
+  def rename_team(trainer, old_name, new_name) do
+    teams = trainer["teams"]
+
+    cond do
+      not Enum.any?(teams, fn t -> t["name"] == old_name end) ->
+        {:error, "Team '#{old_name}' not found"}
+
+      Enum.any?(teams, fn t -> t["name"] == new_name end) ->
+        {:error, "A team named '#{new_name}' already exists"}
+
+      true ->
+        updated_teams = Enum.map(teams, fn t ->
+          if t["name"] == old_name, do: Map.put(t, "name", new_name), else: t
+        end)
+        {:ok, Map.put(trainer, "teams", updated_teams)}
+    end
+  end
+
 end
