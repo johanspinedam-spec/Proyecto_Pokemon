@@ -664,4 +664,19 @@ defmodule PokemonBattle.Servidor do
     end)
     Persistencia.save_trainers(updated)
   end
+
+  defp route_battle_action(room_id, action) do
+    primary = get_primary_node()
+    if primary == Node.self() do
+     case action do
+       {:action, username, act} -> PokemonBattle.Batalla.send_action(room_id, username, act)
+       {:surrender, username}   -> PokemonBattle.Batalla.surrender(room_id, username)
+     end
+    else
+     case action do
+       {:action, username, act} -> :rpc.call(primary, PokemonBattle.Batalla, :send_action, [room_id, username, act])
+       {:surrender, username}   -> :rpc.call(primary, PokemonBattle.Batalla, :surrender, [room_id, username])
+     end
+    end
+  end
 end
