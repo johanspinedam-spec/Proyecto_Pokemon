@@ -265,4 +265,31 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
+  # Ver detalle de un equipo
+  defp process("show_team " <> name, session) do
+    with_session(session, fn ->
+      case GestorEntrenadores.get_team(session.trainer, String.trim(name)) do
+        {:error, msg} ->
+          IO.puts("  #{msg}")
+          session
+
+        {:ok, team} ->
+          IO.puts("\n=== Team '#{team["name"]}' [#{length(team["ids"])}/3] ===")
+          Enum.each(team["ids"], fn id ->
+            pokemon = Enum.find(session.trainer["inventory"], fn p ->
+              to_string(p["id"]) == to_string(id)
+            end)
+            case pokemon do
+              nil -> IO.puts("  [##{id}] (not in inventory)")
+              p   ->
+                IO.puts("  [##{p["id"]}] #{String.capitalize(p["species"])} " <>
+                        "(#{Enum.join(p["types"], "/")}) [#{p["rarity"]}] " <>
+                        "| Atk: #{p["attack"]} Def: #{p["defense"]} Spd: #{p["speed"]}")
+            end
+          end)
+          session
+      end
+    end)
+  end
+
 end
