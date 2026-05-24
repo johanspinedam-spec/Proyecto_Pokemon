@@ -517,4 +517,18 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
+  defp process("join_trade_room " <> code, session) do
+    with_session(session, fn ->
+      c      = String.trim(code)
+      my_pid = self()
+      result = route_to_primary(
+        fn -> Intercambio.join(c, session.trainer, my_pid) end,
+        fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :join, [c, session.trainer, my_pid]) end
+      )
+      case result do
+        :ok           -> IO.puts("Joined trade room #{c}."); %{session | trade_room: c}
+        {:error, msg} -> IO.puts("Error: #{msg}"); session
+      end
+    end)
+  end
 end
