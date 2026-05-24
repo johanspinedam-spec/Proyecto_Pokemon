@@ -87,4 +87,32 @@ defmodule PokemonBattle.SistemaSobres do
     }
   end
 
+  # Assign moves
+
+  defp assign_moves(types) do
+    pool = Persistencia.read_moves()
+
+    type_moves = case types do
+      [single_type] ->
+        pool
+        |> Map.get(single_type, [])
+        |> Enum.shuffle()
+        |> Enum.take(2)
+
+      [type1, type2] ->
+        move1 = pool |> Map.get(type1, []) |> Enum.shuffle() |> Enum.take(1)
+        move2 = pool |> Map.get(type2, []) |> Enum.shuffle() |> Enum.take(1)
+        move1 ++ move2
+    end
+
+    all_moves = pool |> Map.values() |> List.flatten() |> Enum.uniq()
+
+    extra_moves = all_moves
+      |> Enum.reject(fn m -> m in type_moves end)
+      |> Enum.shuffle()
+      |> Enum.take(2)
+
+    type_moves ++ extra_moves
+  end
+
 end
