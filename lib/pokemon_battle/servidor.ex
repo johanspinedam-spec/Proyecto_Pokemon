@@ -426,4 +426,24 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("start_battle " <> room_id, session) do
+    with_session(session, fn ->
+      case String.trim(room_id) do
+        "" ->
+          IO.puts(" Missing room id. Usage: start_battle <room_id>")
+          session
+
+        rid ->
+          result = route_to_primary(
+            fn -> GestorSalas.start_battle(rid, session.trainer["username"]) end,
+            fn -> :rpc.call(get_primary_node(), PokemonBattle.GestorSalas, :start_battle, [rid, session.trainer["username"]]) end
+          )
+          case result do
+            :ok           -> IO.puts("Battle started in room #{rid}!"); session
+            {:error, msg} -> IO.puts("  #{msg}"); session
+          end
+      end
+    end)
+  end
 end
