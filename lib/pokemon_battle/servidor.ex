@@ -361,4 +361,21 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
+  # Eliminar equipo completo
+  defp process("delete_team " <> name, session) do
+    with_session(session, fn ->
+      case GestorEntrenadores.delete_team(session.trainer, String.trim(name)) do
+        {:ok, updated_trainer} ->
+          IO.puts(" Team '#{String.trim(name)}' deleted.")
+          save_trainer(updated_trainer)
+          %{session | trainer: updated_trainer}
+
+        {:error, msg} ->
+          IO.puts("  #{msg}")
+          session
+      end
+    end)
+  end
+
+
 end
