@@ -221,5 +221,8 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
-  
+  defp process("list_teams", session) do
+    with_session(session, fn -> GestorEntrenadores.list_teams(session.trainer) end)
+  end
+
 end
