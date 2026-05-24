@@ -594,4 +594,22 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("cancel_trade", session) do
+    with_session(session, fn ->
+      case session.trade_room do
+        nil ->
+          IO.puts("You are not in a trade room.")
+          session
+
+        code ->
+          route_to_primary(
+            fn -> Intercambio.cancel(code, session.trainer["username"]) end,
+            fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :cancel, [code, session.trainer["username"]]) end
+          )
+          IO.puts("Trade cancelled.")
+          %{session | trade_room: nil}
+      end
+    end)
+  end
 end
