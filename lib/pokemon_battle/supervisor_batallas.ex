@@ -11,6 +11,25 @@ defmodule PokemonBattle.SupervisorBatallas do
     DynamicSupervisor.init(strategy: :one_for_one)
   end
 
-  
+  # Start a new battle
+
+  def start_battle(room_id, turn_time \\ 20) do
+    spec = {
+      PokemonBattle.Batalla,
+      [room_id: room_id, turn_time: turn_time]
+    }
+
+    case DynamicSupervisor.start_child(__MODULE__, spec) do
+      {:ok, _pid} ->
+        IO.puts("[Supervisor] Battle #{room_id} started on node #{Node.self()}.")
+        :ok
+
+      {:error, {:already_started, _}} ->
+        {:error, "A battle with that id already exists"}
+
+      {:error, reason} ->
+        {:error, "Could not start battle: #{inspect(reason)}"}
+    end
+  end
 
 end
