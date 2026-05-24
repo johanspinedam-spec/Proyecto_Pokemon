@@ -1,0 +1,218 @@
+{
+  "charmander": {
+    "types": ["Fire"],
+    "base_attack": 52,
+    "base_defense": 43,
+    "base_speed": 65,
+    "evolution": "charmeleon",
+    "evolution_wins": 3
+  },
+  "charmeleon": {
+    "types": ["Fire"],
+    "base_attack": 64,
+    "base_defense": 58,
+    "base_speed": 80,
+    "evolution": "charizard",
+    "evolution_wins": 6
+  },
+  "charizard": {
+    "types": ["Fire", "Flying"],
+    "base_attack": 84,
+    "base_defense": 78,
+    "base_speed": 100,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "squirtle": {
+    "types": ["Water"],
+    "base_attack": 48,
+    "base_defense": 65,
+    "base_speed": 43,
+    "evolution": "wartortle",
+    "evolution_wins": 3
+  },
+  "wartortle": {
+    "types": ["Water"],
+    "base_attack": 63,
+    "base_defense": 80,
+    "base_speed": 58,
+    "evolution": "blastoise",
+    "evolution_wins": 6
+  },
+  "blastoise": {
+    "types": ["Water"],
+    "base_attack": 83,
+    "base_defense": 100,
+    "base_speed": 78,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "bulbasaur": {
+    "types": ["Grass"],
+    "base_attack": 49,
+    "base_defense": 49,
+    "base_speed": 45,
+    "evolution": "ivysaur",
+    "evolution_wins": 3
+  },
+  "ivysaur": {
+    "types": ["Grass"],
+    "base_attack": 62,
+    "base_defense": 63,
+    "base_speed": 60,
+    "evolution": "venusaur",
+    "evolution_wins": 6
+  },
+  "venusaur": {
+    "types": ["Grass"],
+    "base_attack": 82,
+    "base_defense": 83,
+    "base_speed": 80,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "pikachu": {
+    "types": ["Electric"],
+    "base_attack": 55,
+    "base_defense": 40,
+    "base_speed": 90,
+    "evolution": "raichu",
+    "evolution_wins": 3
+  },
+  "raichu": {
+    "types": ["Electric"],
+    "base_attack": 90,
+    "base_defense": 55,
+    "base_speed": 110,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "geodude": {
+    "types": ["Rock", "Ground"],
+    "base_attack": 80,
+    "base_defense": 100,
+    "base_speed": 20,
+    "evolution": "graveler",
+    "evolution_wins": 3
+  },
+  "graveler": {
+    "types": ["Rock", "Ground"],
+    "base_attack": 95,
+    "base_defense": 115,
+    "base_speed": 35,
+    "evolution": "golem",
+    "evolution_wins": 6
+  },
+  "golem": {
+    "types": ["Rock", "Ground"],
+    "base_attack": 120,
+    "base_defense": 130,
+    "base_speed": 45,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "pidgey": {
+    "types": ["Normal", "Flying"],
+    "base_attack": 45,
+    "base_defense": 40,
+    "base_speed": 56,
+    "evolution": "pidgeotto",
+    "evolution_wins": 3
+  },
+  "pidgeotto": {
+    "types": ["Normal", "Flying"],
+    "base_attack": 60,
+    "base_defense": 55,
+    "base_speed": 71,
+    "evolution": "pidgeot",
+    "evolution_wins": 6
+  },
+  "pidgeot": {
+    "types": ["Normal", "Flying"],
+    "base_attack": 80,
+    "base_defense": 75,
+    "base_speed": 101,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "vulpix": {
+    "types": ["Fire"],
+    "base_attack": 41,
+    "base_defense": 40,
+    "base_speed": 65,
+    "evolution": "ninetales",
+    "evolution_wins": 3
+  },
+  "ninetales": {
+    "types": ["Fire"],
+    "base_attack": 76,
+    "base_defense": 75,
+    "base_speed": 100,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "psyduck": {
+    "types": ["Water"],
+    "base_attack": 52,
+    "base_defense": 48,
+    "base_speed": 55,
+    "evolution": "golduck",
+    "evolution_wins": 3
+  },
+  "golduck": {
+    "types": ["Water"],
+    "base_attack": 82,
+    "base_defense": 78,
+    "base_speed": 85,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "machop": {
+    "types": ["Normal"],
+    "base_attack": 80,
+    "base_defense": 50,
+    "base_speed": 35,
+    "evolution": "machoke",
+    "evolution_wins": 3
+  },
+  "machoke": {
+    "types": ["Normal"],
+    "base_attack": 100,
+    "base_defense": 80,
+    "base_speed": 45,
+    "evolution": "machamp",
+    "evolution_wins": 6
+  },
+  "machamp": {
+    "types": ["Normal"],
+    "base_attack": 130,
+    "base_defense": 80,
+    "base_speed": 55,
+    "evolution": null,
+    "evolution_wins": null
+  },
+  "gastly": {
+    "types": ["Normal"],
+    "base_attack": 35,
+    "base_defense": 30,
+    "base_speed": 80,
+    "evolution": "haunter",
+    "evolution_wins": 3
+  },
+  "haunter": {
+    "types": ["Normal"],
+    "base_attack": 50,
+    "base_defense": 45,
+    "base_speed": 95,
+    "evolution": "gengar",
+    "evolution_wins": 6
+  },
+  "gengar": {
+    "types": ["Normal"],
+    "base_attack": 65,
+    "base_defense": 60,
+    "base_speed": 110,
+    "evolution": null,
+    "evolution_wins": null
+  }
+}
