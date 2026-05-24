@@ -127,4 +127,15 @@ defmodule PokemonBattle.SistemaSobres do
     end
   end
 
+  #  Rarity factor
+
+  defp rarity_factor(rarity) do
+    {min, max} = case rarity do
+      "common" -> {2, 8}
+      "rare"   -> {10, 20}
+      "epic"   -> {25, 40}
+    end
+    min + :rand.uniform(max - min + 1) - 1
+  end
+
 end
