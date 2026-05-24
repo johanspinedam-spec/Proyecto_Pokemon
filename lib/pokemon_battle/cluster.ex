@@ -18,4 +18,23 @@ defmodule PokemonBattle.Cluster do
     end
   end
 
+  # List connected nodes
+
+  def list_nodes do
+    nodes = Node.list()
+
+    IO.puts("\n=== Connected nodes ===")
+    IO.puts("  This node: #{Node.self()}")
+
+    if nodes == [] do
+      IO.puts("  (no connected nodes)")
+    else
+      Enum.each(nodes, fn n ->
+        IO.puts("  - #{n}")
+      end)
+    end
+
+    nodes
+  end
+
 end
