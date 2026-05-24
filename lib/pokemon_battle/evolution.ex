@@ -15,4 +15,38 @@ defmodule PokemonBattle.Evolution do
     pokemon["wins"] >= evolution_wins
   end
 
-end 
+  # Evolve a Pokemon
+
+  def evolve(pokemon) do
+    catalog = Persistencia.read_pokemon()
+    base = catalog[pokemon["species"]]
+    new_species = base["evolution"]
+    new_base = catalog[new_species]
+
+    old_attack = pokemon["attack"]
+    old_defense = pokemon["defense"]
+    old_speed = pokemon["speed"]
+
+    new_attack = round(old_attack * (new_base["base_attack"] / base["base_attack"]))
+    new_defense = round(old_defense * (new_base["base_defense"] / base["base_defense"]))
+    new_speed = round(old_speed * (new_base["base_speed"] / base["base_speed"]))
+
+    new_moves = assign_evolution_moves(pokemon["moves"], new_base["types"])
+
+    evolved = pokemon
+      |> Map.put("species", new_species)
+      |> Map.put("types", new_base["types"])
+      |> Map.put("attack", new_attack)
+      |> Map.put("defense", new_defense)
+      |> Map.put("speed", new_speed)
+      |> Map.put("moves", new_moves)
+
+    IO.puts("\n Congratulations! #{String.capitalize(pokemon["species"])} evolved into #{String.capitalize(new_species)}!")
+    IO.puts("   Attack:  #{old_attack} → #{new_attack}")
+    IO.puts("   Defense: #{old_defense} → #{new_defense}")
+    IO.puts("   Speed:   #{old_speed} → #{new_speed}")
+
+    evolved
+  end
+
+end
