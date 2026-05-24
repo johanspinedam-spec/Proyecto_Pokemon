@@ -338,5 +338,27 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
+  # Quitar pokemon de equipo
+  defp process("remove_from_team " <> rest, session) do
+    with_session(session, fn ->
+      case String.split(String.trim(rest)) do
+        [team_name, pokemon_id] ->
+          case GestorEntrenadores.remove_pokemon_from_team(session.trainer, team_name, pokemon_id) do
+            {:ok, updated_trainer} ->
+              IO.puts(" Pokemon ##{pokemon_id} removed from team '#{team_name}'.")
+              save_trainer(updated_trainer)
+              %{session | trainer: updated_trainer}
+
+            {:error, msg} ->
+              IO.puts("  #{msg}")
+              session
+          end
+
+        _ ->
+          IO.puts(" Usage: remove_from_team <team_name> <pokemon_id>")
+          session
+      end
+    end)
+  end
 
 end
