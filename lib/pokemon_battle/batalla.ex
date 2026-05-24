@@ -415,4 +415,18 @@ defmodule PokemonBattle.Batalla do
       notify_player(state, username, msg)
     end)
   end
+
+  def notify_player(state, username, message) do
+    case Map.get(state.pids, username) do
+      nil -> :ok
+      pid -> send(pid, {:battle_event, message})
+    end
+  end
+
+  def notify_player_raw(state, username, message) do
+    case Map.get(state.pids, username) do
+      nil -> :ok
+      pid -> send(pid, message)
+    end
+  end
 end
