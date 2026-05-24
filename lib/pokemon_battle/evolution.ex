@@ -80,4 +80,39 @@ defmodule PokemonBattle.Evolution do
     end)
   end
 
+  # Private helpers
+
+  defp build_chain(catalog, species, acc) do
+    base = catalog[species]
+    new_acc = acc ++ [species]
+
+    case base["evolution"] do
+      nil  -> new_acc
+      next -> build_chain(catalog, next, new_acc)
+    end
+  end
+
+  defp assign_evolution_moves(current_moves, new_types) do
+    pool = Persistencia.read_moves()
+
+    type_moves = case new_types do
+      [single_type] ->
+        pool
+        |> Map.get(single_type, [])
+        |> Enum.shuffle()
+        |> Enum.take(2)
+
+      [type1, type2] ->
+        move1 = pool |> Map.get(type1, []) |> Enum.shuffle() |> Enum.take(1)
+        move2 = pool |> Map.get(type2, []) |> Enum.shuffle() |> Enum.take(1)
+        move1 ++ move2
+    end
+
+    kept_moves = current_moves
+      |> Enum.reject(fn m -> m in type_moves end)
+      |> Enum.take(2)
+
+    type_moves ++ kept_moves
+  end
+
 end
