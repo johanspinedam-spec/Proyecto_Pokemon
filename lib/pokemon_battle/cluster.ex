@@ -37,4 +37,10 @@ defmodule PokemonBattle.Cluster do
     nodes
   end
 
+# Pick node for new battle
+
+  def node_for_battle do
+    nodes = [Node.self() | Node.list()]
+    Enum.random(nodes)
+  end
 end
