@@ -112,4 +112,9 @@ defmodule PokemonBattle.Servidor do
     session
   end
 
+  defp process("logout", session) do
+    IO.puts("Goodbye, #{session.trainer["username"]}!")
+    %{session | trainer: nil, current_team: nil, current_room: nil, trade_room: nil}
+  end
+
 end
