@@ -115,4 +115,16 @@ defmodule PokemonBattle.SistemaSobres do
     type_moves ++ extra_moves
   end
 
+  # Roll rarity
+
+  defp roll_rarity(probs) do
+    n = :rand.uniform(100)
+
+    cond do
+      n <= probs["common"]                    -> "common"
+      n <= probs["common"] + probs["rare"]    -> "rare"
+      true                                    -> "epic"
+    end
+  end
+
 end
