@@ -117,4 +117,6 @@ defmodule PokemonBattle.GestorSalas do
 
     {:reply, rooms, state}
   end
+
+  def handle_call({:get, room_id}, _from, state), do: {:reply, Map.get(state.rooms, room_id), state}
 end
