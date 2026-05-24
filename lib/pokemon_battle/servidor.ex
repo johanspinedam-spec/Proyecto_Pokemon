@@ -225,4 +225,44 @@ defmodule PokemonBattle.Servidor do
     with_session(session, fn -> GestorEntrenadores.list_teams(session.trainer) end)
   end
 
+  defp process("use_team " <> name, session) do
+    with_session(session, fn ->
+      case String.trim(name) do
+        "" ->
+          IO.puts(" Missing team name. Usage: use_team <name>")
+          session
+
+        n ->
+          team = Enum.find(session.trainer["teams"], fn t -> t["name"] == n end)
+
+          case team do
+            nil ->
+              IO.puts("  Team '#{n}' not found. Use list_teams to see your teams.")
+              session
+
+            t ->
+              missing_ids = Enum.reject(t["ids"], fn id ->
+                Enum.any?(session.trainer["inventory"], fn p ->
+                  to_string(p["id"]) == to_string(id)
+                end)
+              end)
+
+              if length(missing_ids) > 0 do
+                IO.puts("  Cannot use team '#{n}': Pokemon not in inventory: #{Enum.join(missing_ids, ", ")}")
+                session
+              else
+                team_pokemon = Enum.map(t["ids"], fn id ->
+                  Enum.find(session.trainer["inventory"], fn p ->
+                    to_string(p["id"]) == to_string(id)
+                  end)
+                end)
+
+                IO.puts("Team '#{n}' selected (#{length(team_pokemon)} Pokemon).")
+                %{session | current_team: team_pokemon}
+              end
+          end
+      end
+    end)
+  end
+
 end
