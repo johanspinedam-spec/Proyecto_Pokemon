@@ -238,4 +238,29 @@ defmodule PokemonBattle.Batalla do
       state3
     end
   end
+
+  defp check_pending_switches(state) do
+    Enum.reduce(state.players, state, fn {username, _}, acc ->
+      active = acc.actives[username]
+      if MotorCombate.fainted?(active) do
+        team_alive = Enum.filter(acc.teams[username], fn p ->
+          not MotorCombate.fainted?(p)
+        end)
+
+        if length(team_alive) == 0 do
+          # No tiene más Pokémon, la batalla termina (check_end lo maneja)
+          acc
+        else
+          notify_player(acc, username,
+            "\n #{String.capitalize(active["species"])} fainted! " <>
+            "Choose your next Pokemon:\n" <>
+            format_alive_team(team_alive) <>
+            "\nType: switch <pokemon_id>")
+          put_in(acc.pending_switch[username], true)
+        end
+      else
+        acc
+      end
+    end)
+  end
 end
