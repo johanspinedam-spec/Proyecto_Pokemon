@@ -221,4 +221,8 @@ defmodule PokemonBattle.GestorEntrenadores do
     end
   end
 
+  defp initial_pack do
+    %{"id" => :rand.uniform(999_999), "type" => "basic"}
+  end
+
 end
