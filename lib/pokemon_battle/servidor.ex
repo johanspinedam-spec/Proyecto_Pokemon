@@ -152,4 +152,14 @@ defmodule PokemonBattle.Servidor do
         session
     end
   end
+
+  defp process("shop", session) do
+    shop = Persistencia.read_shop()
+    IO.puts("\n=== Shop ===")
+    Enum.each(shop, fn {type, info} ->
+      IO.puts("  #{type} — #{info["price"]} coins | Common: #{info["probabilities"]["common"]}% | Rare: #{info["probabilities"]["rare"]}% | Epic: #{info["probabilities"]["epic"]}%")
+    end)
+    session
+  end
+
 end
