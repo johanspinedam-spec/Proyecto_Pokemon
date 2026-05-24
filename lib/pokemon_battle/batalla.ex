@@ -429,4 +429,10 @@ defmodule PokemonBattle.Batalla do
       pid -> send(pid, message)
     end
   end
+
+   def broadcast(state, message) do
+    Enum.each(state.pids, fn {_username, pid} ->
+      send(pid, {:battle_event, message})
+    end)
+  end
 end
