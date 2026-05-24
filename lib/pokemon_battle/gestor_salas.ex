@@ -60,4 +60,49 @@ defmodule PokemonBattle.GestorSalas do
         end
     end
   end
+
+  def handle_call({:start, room_id, username, requester_pid}, _from, state) do
+    case Map.get(state.rooms, room_id) do
+      nil ->
+        {:reply, {:error, "Room not found"}, state}
+
+      room ->
+        cond do
+          length(room.players) < 2 ->
+            {:reply, {:error, "Need 2 players to start"}, state}
+
+          room.phase != :waiting ->
+            {:reply, {:error, "Battle already started"}, state}
+
+          not Enum.member?(room.players, username) ->
+            {:reply, {:error, "You are not in this room"}, state}
+
+          true ->
+            # Si quien inicia la batalla es del nodo remoto, actualizar su PID
+            updated_pids =
+              if requester_pid != nil do
+                Map.put(room.pids, username, requester_pid)
+              else
+                room.pids
+              end
+
+            updated_room_pids = Map.put(room, :pids, updated_pids)
+
+            PokemonBattle.SupervisorBatallas.start_battle(room_id, room.turn_time)
+
+            Enum.each(room.players, fn player ->
+              team    = room.teams[player]
+              pid     = Map.get(updated_pids, player, self())
+              trainer = %{"username" => player}
+              PokemonBattle.Batalla.join(room_id, trainer, team, pid)
+            end)
+
+            PokemonBattle.Batalla.start_battle(room_id)
+
+            updated_room = updated_room_pids |> Map.put(:phase, :in_progress)
+            new_state    = put_in(state.rooms[room_id], updated_room)
+            {:reply, :ok, new_state}
+        end
+    end
+  end
 end
