@@ -272,4 +272,54 @@ defmodule PokemonBattle.Batalla do
     end)
     |> Enum.join("\n")
   end
+
+  defp execute_action(state, attacker, defender, action) do
+    case action do
+      {:attack, move_name} ->
+        pokemon_atk = state.actives[attacker]
+        pokemon_def = state.actives[defender]
+        move = Enum.find(pokemon_atk["moves"], fn m -> m["name"] == move_name end)
+
+        if move == nil do
+          broadcast(state, "[Error] Move '#{move_name}' is not valid for #{pokemon_atk["species"]}.")
+          state
+        else
+          damage  = MotorCombate.calculate_damage(move, pokemon_atk, pokemon_def)
+          eff_msg = MotorCombate.effectiveness_message(move["type"], pokemon_def["types"])
+          new_def = MotorCombate.apply_damage(pokemon_def, damage)
+
+          broadcast(state,
+            " #{String.capitalize(pokemon_atk["species"])} (#{attacker}) used #{move_name} " <>
+            "→ #{damage} damage on #{String.capitalize(pokemon_def["species"])} (#{defender}). #{eff_msg}")
+
+          if MotorCombate.fainted?(new_def) do
+            broadcast(state, " #{String.capitalize(new_def["species"])} fainted!")
+          end
+
+          state
+          |> put_in([:actives, defender], new_def)
+          |> update_in_team(defender, new_def)
+        end
+
+      {:switch, pokemon_id} ->
+        team = state.teams[attacker]
+        new_active = Enum.find(team, fn p ->
+          to_string(p["id"]) == to_string(pokemon_id) and not MotorCombate.fainted?(p)
+        end)
+
+        if new_active == nil do
+          notify_player(state, attacker, "[Error] Pokemon not available to switch.")
+          state
+        else
+          broadcast(state, " #{attacker} switched to #{String.capitalize(new_active["species"])}!")
+          state
+          |> put_in([:actives, attacker], new_active)
+          |> update_in_team(attacker, new_active)
+        end
+
+      :pass ->
+        broadcast(state, "💤 #{attacker} passed their turn.")
+        state
+    end
+  end
 end
