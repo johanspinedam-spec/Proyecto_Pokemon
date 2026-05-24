@@ -493,4 +493,28 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("create_trade_room", session) do
+    with_session(session, fn ->
+      code   = "TR-#{:rand.uniform(9_999)}"
+      my_pid = self()
+      case route_to_primary(
+        fn -> Intercambio.create(code) end,
+        fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :create, [code]) end
+      ) do
+        :ok ->
+          route_to_primary(
+            fn -> Intercambio.join(code, session.trainer, my_pid) end,
+            fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :join, [code, session.trainer, my_pid]) end
+          )
+          IO.puts("[Trade room #{code} created] Share this code with the other trainer.")
+          %{session | trade_room: code}
+
+        {:error, msg} ->
+          IO.puts("Error: #{msg}")
+          session
+      end
+    end)
+  end
+
 end
