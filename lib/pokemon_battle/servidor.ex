@@ -699,4 +699,16 @@ defmodule PokemonBattle.Servidor do
         %{session | trade_room: nil}
     end
   end
+
+  defp update_inventory_after_trade(session, offered, received) do
+    new_inventory =
+      session.trainer["inventory"]
+      |> Enum.reject(fn p -> offered != nil and p["id"] == offered["id"] end)
+      |> Kernel.++([received])
+
+    updated_trainer = Map.put(session.trainer, "inventory", new_inventory)
+    save_trainer(updated_trainer)
+    IO.puts("Trade complete! You received [##{received["id"]}] #{String.capitalize(received["species"])}.")
+    %{session | trainer: updated_trainer, trade_room: nil}
+  end
 end
