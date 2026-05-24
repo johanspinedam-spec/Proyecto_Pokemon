@@ -478,4 +478,19 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("surrender", session) do
+    with_session(session, fn ->
+      case session.current_room do
+        nil ->
+          IO.puts(" You are not in a battle.")
+          session
+
+        rid ->
+          route_battle_action(rid, {:surrender, session.trainer["username"]})
+          IO.puts("You surrendered.")
+          %{session | current_room: nil}
+      end
+    end)
+  end
 end
