@@ -121,4 +121,9 @@ defmodule PokemonBattle.Servidor do
     with_session(session, fn -> GestorEntrenadores.show_profile(session.trainer) end)
   end
 
+  defp process("leaderboard", session) do
+    GestorEntrenadores.show_leaderboard()
+    session
+  end
+
 end
