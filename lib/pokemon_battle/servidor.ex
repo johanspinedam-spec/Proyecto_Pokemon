@@ -656,4 +656,12 @@ defmodule PokemonBattle.Servidor do
       end
     end
   end
+
+  defp save_trainer(trainer) do
+    trainers = Persistencia.read_trainers()
+    updated  = Enum.map(trainers, fn t ->
+      if t["username"] == trainer["username"], do: trainer, else: t
+    end)
+    Persistencia.save_trainers(updated)
+  end
 end
