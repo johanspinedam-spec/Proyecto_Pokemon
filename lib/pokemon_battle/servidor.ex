@@ -617,4 +617,9 @@ defmodule PokemonBattle.Servidor do
     Cluster.connect(String.to_atom(String.trim(node)))
     session
   end
+
+  defp process("list_nodes", session) do
+    Cluster.list_nodes()
+    session
+  end
 end
