@@ -462,4 +462,20 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("switch " <> id, session) do
+    with_session(session, fn ->
+      case session.current_room do
+        nil ->
+          IO.puts(" You are not in a battle. Use join_room and start_battle first.")
+          session
+
+        rid ->
+          case route_battle_action(rid, {:action, session.trainer["username"], {:switch, String.trim(id)}}) do
+            :ok           -> session
+            {:error, msg} -> IO.puts("  #{msg}"); session
+          end
+      end
+    end)
+  end
 end
