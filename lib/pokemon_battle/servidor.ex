@@ -377,5 +377,12 @@ defmodule PokemonBattle.Servidor do
     end)
   end
 
+   defp process("list_rooms", session) do
+    route_to_primary(
+      fn -> GestorSalas.list_rooms() end,
+      fn -> :rpc.call(get_primary_node(), PokemonBattle.GestorSalas, :list_rooms, []) end
+    )
+    session
+  end
 
 end
