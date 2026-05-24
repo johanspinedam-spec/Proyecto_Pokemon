@@ -531,4 +531,32 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("offer_pokemon " <> id, session) do
+    with_session(session, fn ->
+      case session.trade_room do
+        nil ->
+          IO.puts("You are not in a trade room. Use create_trade_room or join_trade_room first.")
+          session
+
+        code ->
+          pokemon = Enum.find(session.trainer["inventory"], fn p ->
+            to_string(p["id"]) == to_string(String.trim(id))
+          end)
+
+          case pokemon do
+            nil ->
+              IO.puts("Pokemon ##{String.trim(id)} not found in your inventory. Use inventory to see your ids.")
+              session
+
+            p ->
+              route_to_primary(
+                fn -> Intercambio.offer(code, session.trainer["username"], p) end,
+                fn -> :rpc.call(get_primary_node(), PokemonBattle.Intercambio, :offer, [code, session.trainer["username"], p]) end
+              )
+              session
+          end
+      end
+    end)
+  end
 end
