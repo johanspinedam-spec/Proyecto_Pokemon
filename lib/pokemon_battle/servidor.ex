@@ -404,4 +404,26 @@ defmodule PokemonBattle.Servidor do
       end
     end)
   end
+
+  defp process("join_room " <> room_id, session) do
+    with_session(session, fn ->
+      case session.current_team do
+        nil ->
+          IO.puts(" You need to select a team first. Use use_team <name>.")
+          session
+
+        _ ->
+          rid    = String.trim(room_id)
+          my_pid = self()
+          result = route_to_primary(
+            fn -> GestorSalas.join_room(rid, session.trainer, session.current_team, my_pid) end,
+            fn -> :rpc.call(get_primary_node(), PokemonBattle.GestorSalas, :join_room, [rid, session.trainer, session.current_team, my_pid]) end
+          )
+          case result do
+            :ok           -> IO.puts("Joined room #{rid}."); %{session | current_room: rid}
+            {:error, msg} -> IO.puts("  #{msg}"); session
+          end
+      end
+    end)
+  end
 end
