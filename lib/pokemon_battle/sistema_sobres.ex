@@ -147,6 +147,22 @@ defmodule PokemonBattle.SistemaSobres do
     |> Enum.random()
   end
 
-  
+  # Show pack result
+
+  def show_pack_result(pokemon_list, owner) do
+    IO.puts("\nPack opened! You got:\n")
+
+    pokemon_list
+    |> Enum.with_index(1)
+    |> Enum.each(fn {p, index} ->
+      types = Enum.join(p["types"], "/")
+      moves = p["moves"]
+              |> Enum.map(fn m -> "#{m["name"]}(#{m["base_power"]})" end)
+              |> Enum.join(", ")
+
+      IO.puts("  #{index}. [##{p["id"]}] #{String.capitalize(p["species"])} (#{types}) [#{p["rarity"]}] - Original owner: #{owner}")
+      IO.puts("     Moves: #{moves}\n")
+    end)
+  end
 
 end
