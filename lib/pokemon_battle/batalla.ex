@@ -158,4 +158,37 @@ defmodule PokemonBattle.Batalla do
   def handle_call(:get_state, _from, state) do
     {:reply, state, state}
   end
+
+  def handle_info(:turn_timeout, state) do
+    broadcast(state, "\nTime is up! Turn resolved automatically.")
+    new_state = resolve_turn(state)
+    {:noreply, new_state}
+  end
+
+  def handle_info({:nodedown, node}, state) do
+    # Buscar qué jugador estaba en ese nodo
+    disconnected_user = Enum.find_value(state.pids, fn {username, pid} ->
+      if node(pid) == node, do: username, else: nil
+    end)
+
+    if disconnected_user && state.phase == :in_progress do
+      broadcast(state, "  #{disconnected_user} disconnected. They have 15 seconds to reconnect or they lose.")
+      timer = Process.send_after(self(), {:disconnect_timeout, disconnected_user}, 15_000)
+      new_state = put_in(state.disconnect_timers[disconnected_user], timer)
+      {:noreply, new_state}
+    else
+      {:noreply, state}
+    end
+  end
+
+  def handle_info({:disconnect_timeout, username}, state) do
+    if state.phase == :in_progress do
+      [winner] = Map.keys(state.players) |> Enum.reject(&(&1 == username))
+      broadcast(state, " #{username} did not reconnect in time. #{winner} wins!")
+      new_state = end_battle(state, winner, "disconnect")
+      {:noreply, new_state}
+    else
+      {:noreply, state}
+    end
+  end
 end
