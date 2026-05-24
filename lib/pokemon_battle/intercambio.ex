@@ -165,4 +165,11 @@ defmodule PokemonBattle.Intercambio do
       broadcast(state, "Both have offered. Confirm with: confirm_trade")
     end
   end
+
+  defp broadcast(state, message) do
+    Enum.each(state.pids, fn {_username, pid} ->
+      send(pid, {:battle_event, message})
+    end)
+    IO.puts(message)
+  end
 end
