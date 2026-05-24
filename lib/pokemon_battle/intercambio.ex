@@ -144,4 +144,25 @@ defmodule PokemonBattle.Intercambio do
 
     %{user1 => pokemon2, user2 => pokemon1}
   end
+
+  defp show_trade_state(state) do
+    [u1 | rest] = Map.keys(state.participants)
+    u2 = List.first(rest)
+
+    offer1 = case Map.get(state.offers, u1) do
+      nil -> "(no offer)"
+      p   -> "[##{p["id"]}] #{String.capitalize(p["species"])}"
+    end
+
+    offer2 = case Map.get(state.offers, u2) do
+      nil -> "(no offer)"
+      p   -> "[##{p["id"]}] #{String.capitalize(p["species"])}"
+    end
+
+    broadcast(state, "[Trade #{state.code}] #{u1} → #{offer1}\n                #{u2} → #{offer2}")
+
+    if map_size(state.offers) == 2 do
+      broadcast(state, "Both have offered. Confirm with: confirm_trade")
+    end
+  end
 end
