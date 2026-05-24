@@ -196,4 +196,30 @@ defmodule PokemonBattle.Servidor do
     Evolution.show_evolution_chain(String.trim(species))
     session
   end
+
+  defp process("create_team " <> rest, session) do
+    with_session(session, fn ->
+      case String.split(rest) do
+        [name | id_parts] ->
+          ids = id_parts |> Enum.join("") |> String.split(",") |> Enum.map(&String.trim/1) |> Enum.reject(&(&1 == ""))
+
+          case GestorEntrenadores.create_team(session.trainer, name, ids) do
+            {:ok, updated_trainer} ->
+              IO.puts("Team '#{name}' created with #{length(ids)} Pokemon.")
+              save_trainer(updated_trainer)
+              %{session | trainer: updated_trainer}
+
+            {:error, msg} ->
+              IO.puts("Error: #{msg}")
+              session
+          end
+
+        _ ->
+          IO.puts("Usage: create_team <name> <id1,id2,id3>")
+          session
+      end
+    end)
+  end
+
+  
 end
