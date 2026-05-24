@@ -322,4 +322,16 @@ defmodule PokemonBattle.Batalla do
         state
     end
   end
+
+  defp check_end(state) do
+    [p1, p2] = Map.keys(state.players)
+    p1_lost  = all_fainted?(state.teams[p1])
+    p2_lost  = all_fainted?(state.teams[p2])
+
+    cond do
+      p1_lost -> end_battle(state, p2, "battle")
+      p2_lost -> end_battle(state, p1, "battle")
+      true    -> state
+    end
+  end
 end
