@@ -65,4 +65,22 @@ defmodule PokemonBattle.GestorEntrenadores do
     |> Map.put("accumulated_coins", trainer["accumulated_coins"] + amount)
   end
 
+  def show_leaderboard do
+    trainers = Persistencia.read_trainers()
+
+    sorted = Enum.sort_by(trainers, fn t -> {-t["wins"], -t["accumulated_coins"]} end)
+
+    IO.puts("\n=== Global Leaderboard ===")
+    IO.puts("#    Trainer          Wins   Accumulated coins")
+
+    sorted
+    |> Enum.with_index(1)
+    |> Enum.each(fn {t, i} ->
+      IO.puts("#{String.pad_trailing(to_string(i), 4)} " <>
+              "#{String.pad_trailing(t["username"], 16)} " <>
+              "#{String.pad_leading(to_string(t["wins"]), 6)}   " <>
+              "#{t["accumulated_coins"]}")
+    end)
+  end
+
 end
