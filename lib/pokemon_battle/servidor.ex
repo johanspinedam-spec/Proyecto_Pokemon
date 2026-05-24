@@ -634,4 +634,10 @@ defmodule PokemonBattle.Servidor do
     end
     session
   end
+
+  defp route_to_primary(local_fn, remote_fn) do
+    if get_primary_node() == Node.self(), do: local_fn.(), else: remote_fn.()
+  end
+
+  
 end
