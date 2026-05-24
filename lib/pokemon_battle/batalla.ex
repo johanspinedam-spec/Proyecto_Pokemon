@@ -401,4 +401,18 @@ defmodule PokemonBattle.Batalla do
 
     Persistencia.save_trainers(updated_trainers)
   end
+
+  defp show_current_turn(state) do
+    Enum.each(state.players, fn {username, _} ->
+      rival = state.players |> Map.keys() |> Enum.find(&(&1 != username))
+      msg   = MotorCombate.build_turn_message(
+        state.turn,
+        state.actives[rival],
+        state.actives[username],
+        state.teams[username],
+        state.teams[rival]
+      )
+      notify_player(state, username, msg)
+    end)
+  end
 end
