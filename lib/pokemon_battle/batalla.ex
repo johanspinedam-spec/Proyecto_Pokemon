@@ -87,4 +87,65 @@ defmodule PokemonBattle.Batalla do
       {:reply, :ok, %{new_state | timer: timer}}
     end
   end
+
+  def handle_call({:action, username, action}, _from, state) do
+    cond do
+      state.phase != :in_progress ->
+        {:reply, {:error, "Battle is not in progress"}, state}
+
+      not Map.has_key?(state.players, username) ->
+        {:reply, {:error, "You are not in this battle"}, state}
+
+      # Si este jugador tiene un switch pendiente, solo acepta {:switch, id}
+      Map.get(state.pending_switch, username, false) ->
+        case action do
+          {:switch, pokemon_id} ->
+            team = state.teams[username]
+            new_active = Enum.find(team, fn p ->
+              to_string(p["id"]) == to_string(pokemon_id) and not MotorCombate.fainted?(p)
+            end)
+
+            if new_active == nil do
+              notify_player(state, username, " That Pokemon is fainted or not found. Choose another one.")
+              {:reply, {:error, "Invalid switch"}, state}
+            else
+              new_state = state
+                |> put_in([:actives, username], new_active)
+                |> put_in([:pending_switch, username], false)
+                |> update_in_team(username, new_active)
+
+              broadcast(new_state, " #{username} sent out #{String.capitalize(new_active["species"])}!")
+
+              if Enum.any?(new_state.pending_switch, fn {_, v} -> v == true end) do
+                notify_player(new_state, username, "Waiting for opponent to switch too...")
+                {:reply, :ok, new_state}
+              else
+                clean_state = %{new_state | actions: %{}, turn: new_state.turn + 1}
+                show_current_turn(clean_state)
+                timer = start_timer(clean_state.turn_time)
+                {:reply, :ok, %{clean_state | timer: timer}}
+              end
+            end
+
+          _ ->
+            notify_player(state, username, "Your Pokemon fainted! You must switch: switch <pokemon_id>")
+            {:reply, {:error, "You must switch your fainted Pokemon first"}, state}
+        end
+
+      Map.has_key?(state.actions, username) ->
+        {:reply, {:error, "You already sent your action this turn"}, state}
+
+      true ->
+        new_state = put_in(state.actions[username], action)
+        notify_player(new_state, username, " Action registered. Waiting for opponent...")
+
+        if map_size(new_state.actions) == 2 do
+          cancel_timer(new_state.timer)
+          new_state2 = resolve_turn(new_state)
+          {:reply, :ok, new_state2}
+        else
+          {:reply, :ok, new_state}
+        end
+    end
+  end
 end
