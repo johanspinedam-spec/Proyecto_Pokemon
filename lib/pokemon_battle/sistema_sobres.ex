@@ -64,4 +64,27 @@ defmodule PokemonBattle.SistemaSobres do
     end
   end
 
+  # Create pokemon instance
+
+  def create_instance(species, rarity, owner) do
+    catalog = Persistencia.read_pokemon()
+    base    = catalog[species]
+    factor  = rarity_factor(rarity)
+
+    moves = assign_moves(base["types"])
+
+    %{
+      "id"             => :rand.uniform(999_999),
+      "species"        => species,
+      "types"          => base["types"],
+      "original_owner" => owner,
+      "rarity"         => rarity,
+      "attack"         => round(base["base_attack"]   * (1 + factor / 100)),
+      "defense"        => round(base["base_defense"]  * (1 + factor / 100)),
+      "speed"          => round(base["base_speed"]    * (1 + factor / 100)),
+      "moves"          => moves,
+      "wins"           => 0
+    }
+  end
+
 end
