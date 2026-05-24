@@ -32,4 +32,23 @@ defmodule PokemonBattle.Batalla do
     {:ok, state}
   end
 
+  def join(room_id, trainer, team, pid \\ self()) do
+    GenServer.call(via(room_id), {:join, trainer, team, pid})
+  end
+
+  def start_battle(room_id) do
+    GenServer.call(via(room_id), :start)
+  end
+
+  def send_action(room_id, username, action) do
+    GenServer.call(via(room_id), {:action, username, action})
+  end
+
+  def surrender(room_id, username) do
+    GenServer.call(via(room_id), {:surrender, username})
+  end
+
+  def get_state(room_id) do
+    GenServer.call(via(room_id), :get_state)
+  end
 end
