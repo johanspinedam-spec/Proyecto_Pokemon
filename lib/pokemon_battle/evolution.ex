@@ -49,4 +49,18 @@ defmodule PokemonBattle.Evolution do
     evolved
   end
 
+  # Check and evolve all eligible pokemon
+
+  def check_evolutions(trainer) do
+    update_inventory = Enum.map(trainer["inventory"], fn pokemon ->
+      if can_evolve?(pokemon) do
+        evolve(pokemon)
+      else
+        pokemon
+      end
+    end)
+
+    Map.put(trainer, "inventory", update_inventory)
+  end
+
 end
