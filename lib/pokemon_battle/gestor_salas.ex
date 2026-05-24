@@ -28,4 +28,36 @@ defmodule PokemonBattle.GestorSalas do
     {:reply, {:ok, room_id}, new_state}
   end
 
+  def handle_call({:join, room_id, trainer, team, pid}, _from, state) do
+    case Map.get(state.rooms, room_id) do
+      nil ->
+        {:reply, {:error, "Room not found"}, state}
+
+      room ->
+        cond do
+          room.phase != :waiting ->
+            {:reply, {:error, "Room is already in progress or finished"}, state}
+
+          length(room.players) >= 2 ->
+            {:reply, {:error, "Room is full"}, state}
+
+          Enum.any?(room.players, &(&1 == trainer["username"])) ->
+            {:reply, {:error, "You are already in this room"}, state}
+
+          team == [] or team == nil ->
+            {:reply, {:error, "You must select a team first with use_team"}, state}
+
+          true ->
+            updated_room =
+              room
+              |> Map.put(:players, room.players ++ [trainer["username"]])
+              |> put_in([:teams, trainer["username"]], team)
+              |> put_in([:pids, trainer["username"]], pid)
+
+            new_state = put_in(state.rooms[room_id], updated_room)
+            IO.puts("[Rooms] #{trainer["username"]} joined room #{room_id}.")
+            {:reply, :ok, new_state}
+        end
+    end
+  end
 end
