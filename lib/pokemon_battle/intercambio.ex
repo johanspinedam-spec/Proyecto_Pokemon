@@ -77,5 +77,17 @@ defmodule PokemonBattle.Intercambio do
         {:reply, :ok, new_state}
     end
   end
-  
+
+  def handle_call({:offer, username, pokemon}, _from, state) do
+    cond do
+      not Map.has_key?(state.participants, username) ->
+        {:reply, {:error, "You are not in this room"}, state}
+
+      true ->
+        new_state = put_in(state.offers[username], pokemon)
+        broadcast(new_state, "[Trade #{state.code}] #{username} offers [##{pokemon["id"]}] #{String.capitalize(pokemon["species"])}")
+        show_trade_state(new_state)
+        {:reply, :ok, new_state}
+    end
+  end
 end
