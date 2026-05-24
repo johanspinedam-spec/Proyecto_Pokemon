@@ -622,4 +622,9 @@ defmodule PokemonBattle.Servidor do
     Cluster.list_nodes()
     session
   end
+
+  defp process("cluster_info", session) do
+    Cluster.info()
+    session
+  end
 end
