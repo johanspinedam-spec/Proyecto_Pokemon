@@ -38,4 +38,26 @@ defmodule PokemonBattle.Servidor do
     loop(next_session)
   end
 
+  defp flush_battle_events(session) do
+    receive do
+      {:battle_event, msg} ->
+        IO.puts(msg)
+        flush_battle_events(session)
+
+      {:refresh_trainer, username} ->
+        # Recargar datos frescos desde el archivo
+        trainers = Persistencia.read_trainers()
+        case Enum.find(trainers, fn t -> t["username"] == username end) do
+          nil     -> flush_battle_events(session)
+          trainer ->
+            IO.puts("\n✅ Profile updated — Coins: #{trainer["coins"]} | Wins: #{trainer["wins"]}")
+            # Retornar la sesión actualizada
+            throw({:updated_session, %{session | trainer: trainer, current_room: nil}})
+        end
+
+    after
+      0 -> session
+    end
+  end
+
 end
